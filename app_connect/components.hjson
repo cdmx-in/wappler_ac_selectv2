@@ -1,0 +1,153 @@
+{
+    "components": [
+        {
+            "type": "dmx-select2",
+            "selector": "dmx-select2, [is=dmx-select2]",
+            "groupTitle": "Forms",
+            "groupIcon": "fa fa-lg fa-file-text-o",
+            "title": "Select 2: @@id@@",
+            "icon": "fa fa-lg fa-caret-square-o-down",
+            "state": "opened",
+            "anyParent": true,
+            "template": '<select id="@@id@@" is="dmx-select2" class="form-select select2">\n</select>',
+            "baseName": "select2",
+            "help": "Select2 component for data display",
+            "dataScheme": [],
+            "outputType": "object",
+            "dataPick": true,
+            "properties": [],
+            "actionsScheme": [],
+            "children": [],
+            "allowed_children": {},
+            "copyFiles": [
+                {
+                    "src": "dmx-select2.js",
+                    "dst": "js/dmx-select2.js"
+                },
+                {
+                  "src": "../../../node_modules/select2/dist/js/select2.full.min.js",
+                  "dst": "js/select2.full.min.js"
+                },
+                {
+                  "src": "../../../node_modules/select2/dist/css/select2.min.css",
+                  "dst": "css/select2.min.css"
+                },
+                {
+                  "src": "../../../node_modules/select2/dist/js/i18n/he.js",
+                  "dst": "js/i18n/he.js"
+                },
+                {
+                  "src": "../../../node_modules/select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.min.css",
+                  "dst": "css/select2-bootstrap-5-theme.min.css"
+                },
+                {
+                  "src": "../../../node_modules/select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.rtl.min.css",
+                  "dst": "css/select2-bootstrap-5-theme.rtl.min.css"
+                }
+            ],
+            "linkFiles": [
+                {
+                    "src": "js/dmx-select2.js",
+                    "type": "js",
+                    "defer": true
+                },
+                {
+                    "src": "js/select2.full.min.js",
+                    "type": "js",
+                    "defer": true
+                },
+                {
+                    "src": "js/i18n/he.js",
+                    "type": "js",
+                    "defer": true
+                },
+                {
+                    "src": "css/select2.min.css",
+                    "type": "css"
+                },
+                {
+                    "src": "css/select2-bootstrap-5-theme.min.css",
+                    "type": "css"
+                },
+                {
+                    "src": "css/select2-bootstrap-5-theme.rtl.min.css",
+                    "type": "css"
+                }
+            ],
+            "cssOrder": [],
+            "jsOrder": []
+        }
+    ],
+    "attributes": [
+    {
+      "name": "select2Placeholder",
+      "attributeStartsWith": "dmx-bind",
+      "attribute": "field_placeholder",
+      "title": "Placeholder",
+      "type": "boolean",
+      "display": "fieldset",
+      "icon": "fa fa-lg fa-check-square",
+      "groupTitle": "Input",
+      "groupIcon": "fa fa-lg fa-pencil",
+      "defaultValue": false,
+      "show": [
+        "select2PlaceholderConfig"
+      ],
+      "noChangeOnHide": true,
+      "groupEnabler": true,
+      "children": [
+        {
+          "name": "select2PlaceholderConfig",
+          "attributeStartsWith": "dmx-bind",
+          "attribute": "field_placeholder",
+          "isValue": true,
+          "dataBindings": true,
+          "title": "Placeholder:",
+          "type": "text",
+          "help": "Select a Theme for the Select2",
+          "defaultValue": "",
+          "initDisplay": "none"
+        }
+      ],
+    "allowedOn": {
+        "dmx-select2": true
+      }
+    },
+    {
+      "name": "select2Theme",
+      "attributeStartsWith": "dmx-bind",
+      "attribute": "field_theme",
+      "title": "Theme",
+      "type": "boolean",
+      "display": "fieldset",
+      "icon": "fa fa-lg fa-check-square",
+      "groupTitle": "Configs",
+      "groupIcon": "fa fa-lg fa-paint-brush"
+      "defaultValue": false,
+      "show": [
+        "select2ThemeConfigs"
+      ],
+      "noChangeOnHide": true,
+      "groupEnabler": true,
+      "children": [
+        {
+            "name": "select2ThemeConfigs",
+            "attribute": "field_theme",
+            "title": "Theme",
+            "type": "droplist",
+            "defaultValue": '',
+            "values": [
+            {title: 'Default', value: ''},
+            {title: 'Bootstrap-5', value: 'bootstrap-5'}
+            ],
+            "help": "Select a theme for the select2 field"
+        },
+      ],
+    "allowedOn": {
+        "dmx-select2": true
+      }
+    }
+    ],
+    "events": [],
+    "static_events": []
+}
