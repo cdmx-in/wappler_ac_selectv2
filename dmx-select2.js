@@ -10,7 +10,9 @@ dmx.Component("select2", {
     options: { type: Array, default: [] },
     optionText: { type: String, default: "$value" },
     optionValue: { type: String, default: "$value" },
-    field_theme: { type: String, default: "" },
+    field_theme: { type: String, default: "bootstrap-5" },
+    field_width: { type: String, default: "resolve" },
+    field_placeholder: { type: String, default: "Select a Option." }
   },
   methods: {
     setValue: function (t, e) {
@@ -21,7 +23,6 @@ dmx.Component("select2", {
     },
   },
   renderSelect: function () {
-    $("#" + this.$node.id).data("placeholder", this.$node.dataset.placeholder);
     var dropdownParent = null;
     // Check if the parent of the element is a modal
     if ($("#" + this.$node.id).closest(".modal").length > 0) {
@@ -29,9 +30,11 @@ dmx.Component("select2", {
     }
     $("#" + this.$node.id).select2({
         theme: this.props.field_theme,
+        width: this.props.field_width,
+        placeholder: this.props.field_placeholder,
         dropdownParent: dropdownParent,
     });
-  },
+  }, 
   render: function (node) {
       (this.options = []),
       this.props.value ? (this.updateValue = !0) : (this.props.value = this.$node.value),

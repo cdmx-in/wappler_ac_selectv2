@@ -135,12 +135,48 @@
             "attribute": "field_theme",
             "title": "Theme",
             "type": "droplist",
-            "defaultValue": '',
+            "defaultValue": 'bootstrap-5',
             "values": [
-            {title: 'Default', value: ''},
-            {title: 'Bootstrap-5', value: 'bootstrap-5'}
+              {title: 'Default', value: 'default'},
+            {title: 'Classic', value: 'classic'},
+            {title: 'Bootstrap 5', value: 'bootstrap-5'}
             ],
             "help": "Select a theme for the select2 field"
+        },
+      ],
+    "allowedOn": {
+        "dmx-select2": true
+      }
+    },
+    {
+      "name": "select2Width",
+      "attributeStartsWith": "dmx-bind",
+      "attribute": "field_widths",
+      "title": "Width",
+      "type": "boolean",
+      "display": "fieldset",
+      "icon": "fa fa-lg fa-check-square",
+      "groupTitle": "Configs",
+      "groupIcon": "fa fa-lg fa-paint-brush"
+      "defaultValue": false,
+      "show": [
+        "select2WidthConfigs"
+      ],
+      "noChangeOnHide": true,
+      "groupEnabler": true,
+      "children": [
+        {
+            "name": "select2WidthConfigs",
+            "attribute": "field_width",
+            "title": "Width",
+            "type": "droplist",
+            "defaultValue": 'resolve',
+            "values": [
+            {title: 'Resolve', value: 'resolve'},
+            {title: 'Element', value: 'element'},
+            {title: 'Style', value: 'style'}
+            ],
+            "help": "Set Width Config"
         },
       ],
     "allowedOn": {

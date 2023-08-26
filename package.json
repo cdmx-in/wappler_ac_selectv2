@@ -18,7 +18,7 @@
         "publish-dry-run": "npm publish ./dist --access public --dry-run"
     },
     "dependencies": {
-        "select2": "4.1.x",
+        "select2": "4.1.x.x",
         "select2-bootstrap-5-theme": "1.3.x"
     }
 }
