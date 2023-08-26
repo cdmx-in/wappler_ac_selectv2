@@ -1,6 +1,6 @@
 {
     "name": "@cdmx/wappler_ac_selectv2",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "type": "module",
     "description": "App Connect extension for Select2",
     "license": "MIT",
@@ -18,7 +18,7 @@
         "publish-dry-run": "npm publish ./dist --access public --dry-run"
     },
     "dependencies": {
-        "select2": "4.1.x.x",
+        "select2": "4.1.0-rc.0",
         "select2-bootstrap-5-theme": "1.3.x"
     }
 }
