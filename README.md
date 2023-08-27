@@ -23,7 +23,12 @@ The Select2 extension module enhances the functionality of the Select module by 
   - Bootstrap-5: Bootstrap 5 theme
 
 ### `Width`
-- **Description:** This attribute allows you to choose a theme for the Select2 component, giving you control over its visual appearance.
+- **Description:** This attribute allows you to set the width of the Select2 component, giving you control over its visual appearance.
 - **Values:**
-  - Default: Default theme
-  - Bootstrap-5: Bootstrap 5 theme
+  - `resolve`: Resolve Theme: A theme-specific width (default).
+  - `element`: Bootstrap 5 Theme: A width suitable for Bootstrap 5 theme.
+  - `style`: Style Theme: A width suitable for the Style theme.
+  - `100%`: 100% width.
+  - `50%`: 50% width.
+  - `200px`: 200 pixels width.
+  - `300px`: 300 pixels width.
