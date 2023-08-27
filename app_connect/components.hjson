@@ -9,7 +9,7 @@
             "icon": "fa fa-lg fa-caret-square-o-down",
             "state": "opened",
             "anyParent": true,
-            "template": '<select id="@@id@@" is="dmx-select2" class="form-select select2">\n</select>',
+            "template": '<select id="@@id@@" is="dmx-select2" class="form-select">\n</select>',
             "baseName": "select2",
             "help": "Select2 component for data display",
             "dataScheme": [],
@@ -39,10 +39,6 @@
                 {
                   "src": "../../../node_modules/select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.min.css",
                   "dst": "css/select2-bootstrap-5-theme.min.css"
-                },
-                {
-                  "src": "../../../node_modules/select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.rtl.min.css",
-                  "dst": "css/select2-bootstrap-5-theme.rtl.min.css"
                 }
             ],
             "linkFiles": [
@@ -67,10 +63,6 @@
                 },
                 {
                     "src": "css/select2-bootstrap-5-theme.min.css",
-                    "type": "css"
-                },
-                {
-                    "src": "css/select2-bootstrap-5-theme.rtl.min.css",
                     "type": "css"
                 }
             ],
@@ -139,7 +131,8 @@
             "values": [
               {title: 'Default', value: 'default'},
             {title: 'Classic', value: 'classic'},
-            {title: 'Bootstrap 5', value: 'bootstrap-5'}
+            {title: 'Bootstrap 5', value: 'bootstrap-5'},
+            {title: 'Custom', value: 'custom'}
             ],
             "help": "Select a theme for the select2 field"
         },
@@ -181,6 +174,41 @@
                 { "title": "300px", "value": "300px" }
             ],
             "help": "Set Width Config"
+        },
+      ],
+    "allowedOn": {
+        "dmx-select2": true
+      }
+    },
+    {
+      "name": "select2CssClass",
+      "attributeStartsWith": "dmx-bind",
+      "attribute": "css_classes",
+      "title": "Size Class",
+      "type": "boolean",
+      "display": "fieldset",
+      "icon": "fa fa-lg fa-check-square",
+      "groupTitle": "Configs",
+      "groupIcon": "fa fa-lg fa-cog"
+      "defaultValue": false,
+      "show": [
+        "select2CssClassConfigs"
+      ],
+      "noChangeOnHide": true,
+      "groupEnabler": true,
+      "children": [
+        {
+            "name": "select2CssClassConfigs",
+            "attribute": "css_class",
+            "title": "Size Class",
+            "type": "droplist",
+            "defaultValue": 'select2--large',
+            "values": [
+            { "title": "Large", "value": "select2--large" },
+                { "title": "Small", "value": "select2--small" },
+                { "title": "Custom", "value": "select2--custom" }
+            ],
+            "help": "Set Size Config"
         },
       ],
     "allowedOn": {

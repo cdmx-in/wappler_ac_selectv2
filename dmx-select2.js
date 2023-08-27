@@ -15,7 +15,8 @@ dmx.Component("select2", {
     field_placeholder: { type: String, default: "Select a Option." },
     enable_rtl: { type: Boolean, default: false },
     select_on_close: { type: Boolean, default: false },
-    close_on_select: { type: Boolean, default: false }
+    close_on_select: { type: Boolean, default: false },
+    css_class: { type: String, default: "select2--large" },
   },
   methods: {
     setValue: function (t, e) {
@@ -38,7 +39,9 @@ dmx.Component("select2", {
         selectOnClose: this.props.select_on_close,
         closeOnSelect: this.props.close_on_select,
         placeholder: this.props.field_placeholder,
-        dropdownParent: dropdownParent
+        dropdownParent: dropdownParent,
+        selectionCssClass: this.props.css_class,
+        dropdownCssClass: this.props.css_class
     });
   }, 
   render: function (node) {
