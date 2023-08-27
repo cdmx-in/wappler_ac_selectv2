@@ -26,13 +26,13 @@ dmx.Component("select2", {
     var dropdownParent = null;
     // Check if the parent of the element is a modal
     if ($("#" + this.$node.id).closest(".modal").length > 0) {
-        dropdownParent = $("#" + this.$node.id).closest(".modal").attr("id");
+        dropdownParent = $("#" +$("#" + this.$node.id).closest(".modal").attr("id"));
     }
     $("#" + this.$node.id).select2({
         theme: this.props.field_theme,
         width: this.props.field_width,
         placeholder: this.props.field_placeholder,
-        dropdownParent: $("#" +dropdownParent),
+        dropdownParent: dropdownParent
     });
   }, 
   render: function (node) {
@@ -51,14 +51,15 @@ dmx.Component("select2", {
       e.has("options") && (this.renderOptions(), (this.updateValue = !0)),
       e.has("value") && (this.updateValue = !0),
       t.disabled != this.props.disabled && (this.$node.disabled = this.props.disabled)
-      var modalID = $("#" + this.$node.id).closest(".modal").attr("id");
-
       // Check if the modal is hidden
       // if ($("#" + modalID).is(":hidden")) {
       // }
-      $("#" + modalID).on("shown.bs.modal", () => {
-        $("#" + this.$node.id).val(selectedValue).trigger('change');
-    })
+      if ($("#" + this.$node.id).closest(".modal").length > 0) {
+          let modalID = $("#" + this.$node.id).closest(".modal").attr("id");
+          $("#" + modalID).on("shown.bs.modal", () => {
+            $("#" + this.$node.id).val(selectedValue).trigger('change');
+        })
+      }
   },
   updated: function () {
     this.updateValue &&
@@ -79,7 +80,6 @@ dmx.Component("select2", {
         "selectedText",
         (this.$node.options[e] && this.$node.options[e].text) || ""
       );
-      console.log("changed deleted")
       selectedValue = this.get("selectedValue");
       $("#" + this.$node.id).val(selectedValue).trigger('change');
   },
