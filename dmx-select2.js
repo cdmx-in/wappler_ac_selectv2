@@ -12,7 +12,10 @@ dmx.Component("select2", {
     optionValue: { type: String, default: "$value" },
     field_theme: { type: String, default: "bootstrap-5" },
     field_width: { type: String, default: "resolve" },
-    field_placeholder: { type: String, default: "Select a Option." }
+    field_placeholder: { type: String, default: "Select a Option." },
+    enable_rtl: { type: Boolean, default: false },
+    select_on_close: { type: Boolean, default: false },
+    close_on_select: { type: Boolean, default: false }
   },
   methods: {
     setValue: function (t, e) {
@@ -31,6 +34,9 @@ dmx.Component("select2", {
     $("#" + this.$node.id).select2({
         theme: this.props.field_theme,
         width: this.props.field_width,
+        dir: (this.props.enable_rtl ? "rtl" : null),
+        selectOnClose: this.props.select_on_close,
+        closeOnSelect: this.props.close_on_select,
         placeholder: this.props.field_placeholder,
         dropdownParent: dropdownParent
     });

@@ -120,9 +120,9 @@
       "title": "Theme",
       "type": "boolean",
       "display": "fieldset",
-      "icon": "fa fa-lg fa-check-square",
+      "icon": "fa fa-lg fa-paint-brush",
       "groupTitle": "Configs",
-      "groupIcon": "fa fa-lg fa-paint-brush"
+      "groupIcon": "fa fa-lg fa-cog"
       "defaultValue": false,
       "show": [
         "select2ThemeConfigs"
@@ -157,7 +157,7 @@
       "display": "fieldset",
       "icon": "fa fa-lg fa-check-square",
       "groupTitle": "Configs",
-      "groupIcon": "fa fa-lg fa-paint-brush"
+      "groupIcon": "fa fa-lg fa-cog"
       "defaultValue": false,
       "show": [
         "select2WidthConfigs"
@@ -172,7 +172,7 @@
             "type": "droplist",
             "defaultValue": 'resolve',
             "values": [
-                { "title": "Resolve", "value": "resolve" },
+            { "title": "Resolve", "value": "resolve" },
                 { "title": "Element", "value": "element" },
                 { "title": "Style", "value": "style" },
                 { "title": "100%", "value": "100%" },
@@ -186,6 +186,39 @@
     "allowedOn": {
         "dmx-select2": true
       }
+    },
+    {
+      "name": "select2Rtl",
+      "attributeStartsWith": "dmx-bind",
+      "attribute": "enable_rtl",
+      "title": "RTL",
+      "type": "boolean",
+      "icon": "fa fa-lg fa-align-right",
+      "groupTitle": "Configs",
+      "groupIcon": "fa fa-lg fa-cog"
+      "defaultValue": false,
+    },
+    {
+      "name": "select2CloseOnSelect",
+      "attributeStartsWith": "dmx-bind",
+      "attribute": "close_on_select",
+      "title": "Close On Select",
+      "type": "boolean",
+      "icon": "fa fa-lg fa-toggle-on",
+      "groupTitle": "Configs",
+      "groupIcon": "fa fa-lg fa-cog"
+      "defaultValue": false,
+    },
+    {
+      "name": "select2SelectOnClose",
+      "attributeStartsWith": "dmx-bind",
+      "attribute": "select_on_close",
+      "title": "Select On Close",
+      "type": "boolean",
+      "icon": "fa fa-lg fa-check-circle",
+      "groupTitle": "Configs",
+      "groupIcon": "fa fa-lg fa-cog"
+      "defaultValue": false,
     }
     ],
     "events": [],
