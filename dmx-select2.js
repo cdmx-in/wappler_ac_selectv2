@@ -34,7 +34,7 @@ dmx.Component("select2", {
     $("#" + this.$node.id).select2({
         theme: this.props.field_theme,
         width: this.props.field_width,
-        dir: (this.props.enable_rtl ? "rtl" : null),
+        dir: (this.props.enable_rtl ? "rtl" : "ltr"),
         selectOnClose: this.props.select_on_close,
         closeOnSelect: this.props.close_on_select,
         placeholder: this.props.field_placeholder,
