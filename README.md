@@ -12,7 +12,7 @@ The Select2 extension module enhances the functionality of the Select module by 
   - [Rtl](#Rtl)
   - [CloseOnSelect](#CloseOnSelect)
   - [SelectOnClose](#SelectOnClose)
-
+  - [Tags](#Tags)
 ## Attributes
 
 ### `Placeholder`
