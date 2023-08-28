@@ -108,7 +108,7 @@
     {
       "name": "select2Theme",
       "attributeStartsWith": "dmx-bind",
-      "attribute": "field_theme",
+      "attribute": "field_themes",
       "title": "Theme",
       "type": "boolean",
       "display": "fieldset",
