@@ -14,6 +14,7 @@ dmx.Component("select2", {
     field_width: { type: String, default: "resolve" },
     field_placeholder: { type: String, default: "Select a Option." },
     enable_rtl: { type: Boolean, default: false },
+    enable_tags: { type: Boolean, default: false },
     select_on_close: { type: Boolean, default: false },
     close_on_select: { type: Boolean, default: false },
     css_class: { type: String, default: "select2--large" },
@@ -27,19 +28,20 @@ dmx.Component("select2", {
     },
   },
   renderSelect: function () {
-    var dropdownParent = null;
+    let dropdown_parent = null;
     // Check if the parent of the element is a modal
     if ($("#" + this.$node.id).closest(".modal").length > 0) {
-        dropdownParent = $("#" +$("#" + this.$node.id).closest(".modal").attr("id"));
+        dropdown_parent = $(this.$node).parent().parent();
     }
     $("#" + this.$node.id).select2({
         theme: this.props.field_theme,
         width: this.props.field_width,
+        tags: this.props.enable_tags,
         dir: (this.props.enable_rtl ? "rtl" : "ltr"),
         selectOnClose: this.props.select_on_close,
         closeOnSelect: this.props.close_on_select,
         placeholder: this.props.field_placeholder,
-        dropdownParent: dropdownParent,
+        dropdownParent: dropdown_parent,
         selectionCssClass: this.props.css_class,
         dropdownCssClass: this.props.css_class
     });

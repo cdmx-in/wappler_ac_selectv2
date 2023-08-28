@@ -247,6 +247,17 @@
       "groupTitle": "Configs",
       "groupIcon": "fa fa-lg fa-cog"
       "defaultValue": false,
+    },
+    {
+      "name": "select2Tags",
+      "attributeStartsWith": "dmx-bind",
+      "attribute": "enable_tags",
+      "title": "Tags",
+      "type": "boolean",
+      "icon": "fas fa-star",
+      "groupTitle": "Configs",
+      "groupIcon": "fa fa-lg fa-cog"
+      "defaultValue": false,
     }
     ],
     "events": [],
