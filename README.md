@@ -13,6 +13,7 @@ The Select2 extension module enhances the functionality of the Select module by 
   - [CloseOnSelect](#CloseOnSelect)
   - [SelectOnClose](#SelectOnClose)
   - [Tags](#Tags)
+
 ## Attributes
 
 ### `Placeholder`
@@ -23,7 +24,9 @@ The Select2 extension module enhances the functionality of the Select module by 
 - **Description:** This attribute allows you to choose a theme for the Select2 component, giving you control over its visual appearance.
 - **Values:**
   - Default: Default theme
+  - Classic: Select2 Classic theme
   - Bootstrap-5: Bootstrap 5 theme
+  - Custom: Custom theme (Should be included in layout with .select2-container--custom in the css)
 
 ### `Width`
 - **Description:** This attribute allows you to set the width of the Select2 component, giving you control over its visual appearance.
