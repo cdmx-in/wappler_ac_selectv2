@@ -44,3 +44,6 @@ The Select2 extension module enhances the functionality of the Select module by 
 
 ### `SelectOnClose`
 **Description:** If set to true, this option will automatically select the currently highlighted item when the Select2 dropdown is closed. (Default: false)
+
+### `Tags`
+**Description:** Dynamically create new options from text input by the user in the search box. (Default: false)
