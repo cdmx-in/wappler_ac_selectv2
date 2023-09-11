@@ -225,7 +225,10 @@
       "groupTitle": "Configs",
       "groupIcon": "fa fa-lg fa-cog"
       "defaultValue": false,
-      "help": "This option enables right-to-left (RTL) text direction for the Select2 element."
+      "help": "This option enables right-to-left (RTL) text direction for the Select2 element.",
+      "allowedOn": {
+        "dmx-select2": true
+      }
     },
     {
       "name": "select2CloseOnSelect",
@@ -237,7 +240,10 @@
       "groupTitle": "Configs",
       "groupIcon": "fa fa-lg fa-cog"
       "defaultValue": false,
-      "help": "Controls whether the dropdown is closed after a selection is made."
+      "help": "Controls whether the dropdown is closed after a selection is made.",
+      "allowedOn": {
+        "dmx-select2": true
+      }
     },
     {
       "name": "select2SelectOnClose",
@@ -249,7 +255,10 @@
       "groupTitle": "Configs",
       "groupIcon": "fa fa-lg fa-cog"
       "defaultValue": false,
-      "help": "Implements automatic selection when the dropdown is closed."
+      "help": "Implements automatic selection when the dropdown is closed.",
+      "allowedOn": {
+        "dmx-select2": true
+      }
     },
     {
       "name": "select2Tags",
@@ -261,7 +270,10 @@
       "groupTitle": "Configs",
       "groupIcon": "fa fa-lg fa-cog"
       "defaultValue": false,
-      "help": "Dynamically create new options from text input by the user in the search box."
+      "help": "Dynamically create new options from text input by the user in the search box.",
+      "allowedOn": {
+        "dmx-select2": true
+      }
     }
     ],
     "events": [],
