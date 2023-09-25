@@ -17,7 +17,7 @@ dmx.Component("select2", {
     enable_tags: { type: Boolean, default: false },
     select_on_close: { type: Boolean, default: false },
     close_on_select: { type: Boolean, default: false },
-    css_class: { type: String, default: "select2--large" },
+    css_class: { type: String, default: "select2--large" }
   },
   methods: {
     setValue: function (t, e) {
@@ -43,7 +43,8 @@ dmx.Component("select2", {
         placeholder: this.props.field_placeholder,
         dropdownParent: dropdown_parent,
         selectionCssClass: this.props.css_class,
-        dropdownCssClass: this.props.css_class
+        dropdownCssClass: this.props.css_class,
+        containerCssClass: this.props.css_class
     });
   }, 
   render: function (node) {
