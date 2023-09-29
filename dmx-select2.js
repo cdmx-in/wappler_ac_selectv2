@@ -20,6 +20,12 @@ dmx.Component("select2", {
     css_class: { type: String, default: "select2--large" }
   },
   methods: {
+    setSelectedIndex: function (t) {
+      (this.$node.selectedIndex = t), this.updateData();
+    },
+    updatedSelectedData: function () {
+      this.updateData()
+    },
     setValue: function (t, e) {
       dmx.array(this.$node.options).forEach(function (n) {
         (n.selected = n.value == t), e && (n.defaultSelected = n.selected);
