@@ -33,6 +33,11 @@ dmx.Component("select2", {
       this.renderSelect();
     },
   },
+  events: {
+    selected: Event,
+    opened: Event,
+    closed: Event
+  },
   renderSelect: function () {
     let dropdown_parent = null;
     // Check if the parent of the element is a modal
@@ -58,10 +63,18 @@ dmx.Component("select2", {
       this.props.value ? (this.updateValue = !0) : (this.props.value = this.$node.value),
       dmx.BaseComponent.prototype.render.call(this, node),
       (this.$node.disabled = this.props.disabled),
-      this.$node.addEventListener("change", this.updateData.bind(this)),
-      this.$node.addEventListener("invalid", this.updateData.bind(this)),
-      this.$node.addEventListener("focus", this.updateData.bind(this)),
-      this.$node.addEventListener("blur", this.updateData.bind(this)),
+      $(this.$node).on('select2:close', (e) => {
+        this.updateData();
+        this.dispatchEvent('closed');
+      });
+      $(this.$node).on('select2:open', (e) => {
+        this.updateData();
+        this.dispatchEvent('opened');
+      });
+      $(this.$node).on('select2:select', (e) => {
+        this.updateData();
+        this.dispatchEvent('selected');
+      });
       this.renderOptions(),
       this.updateData();
   },
@@ -87,6 +100,7 @@ dmx.Component("select2", {
   updateData: function (t) {
     dmx.Component("form-element").prototype.updateData.call(this, t);
     var e = this.$node.selectedIndex;
+    
     this.set("selectedIndex", e),
       this.set(
         "selectedValue",
