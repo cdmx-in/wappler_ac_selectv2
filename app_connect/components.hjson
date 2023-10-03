@@ -276,6 +276,112 @@
       }
     }
     ],
-    "events": [],
-    "static_events": []
+    "events": [
+    {
+      "name": "dmx-selectv2-selected",
+      "attributeStartsWith": "dmx-on",
+      "attribute": "selected",
+      "display": "fieldset",
+      "title": "Selected",
+      "icon": "fa fa-lg fa-chevron-right",
+      "groupTitle": "Select Events",
+      "groupIcon": "fa fa-lg fa-toggle-on",
+      "defaultValue": false,
+      "show": [
+        "selectOpened",
+        "selectSelected",
+        "selectClosed"
+      ],
+      "noChangeOnHide": true,
+      "type": "boolean",
+      "groupEnabler": true,
+      "children": [
+        {
+          "name": "selectSelected",
+          "attributeStartsWith": "dmx-on",
+          "attribute": "selected",
+          "isValue": true,
+          "actionsPicker": true,
+          "title": "Action:",
+          "type": "text",
+          "help": "Choose the action to execute.",
+          "defaultValue": "",
+          "initDisplay": "none"
+        }
+      ],
+      "allowedOn": {
+        "dmx-select2": true
+      }
+    },
+    {
+      "name": "dmx-selectv2-opened",
+      "attributeStartsWith": "dmx-on",
+      "attribute": "opened",
+      "display": "fieldset",
+      "title": "Opened",
+      "icon": "fa fa-lg fa-chevron-right",
+      "groupTitle": "Select Events",
+      "groupIcon": "fa fa-lg fa-toggle-on",
+      "defaultValue": false,
+      "show": [
+        "selectOpened"
+      ],
+      "noChangeOnHide": true,
+      "type": "boolean",
+      "groupEnabler": true,
+      "children": [
+        {
+          "name": "selectOpened",
+          "attributeStartsWith": "dmx-on",
+          "attribute": "opened",
+          "isValue": true,
+          "actionsPicker": true,
+          "title": "Action:",
+          "type": "text",
+          "help": "Choose the action to execute.",
+          "defaultValue": "",
+          "initDisplay": "none"
+        }
+      ],
+      "allowedOn": {
+        "dmx-select2": true
+      }
+    },
+    {
+      "name": "dmx-selectv2-closed",
+      "attributeStartsWith": "dmx-on",
+      "attribute": "closed",
+      "display": "fieldset",
+      "title": "Closed",
+      "icon": "fa fa-lg fa-chevron-right",
+      "groupTitle": "Select Events",
+      "groupIcon": "fa fa-lg fa-toggle-on",
+      "defaultValue": false,
+      "show": [
+        "selectClosed"
+      ],
+      "noChangeOnHide": true,
+      "type": "boolean",
+      "groupEnabler": true,
+      "children": [
+        {
+          "name": "selectClosed",
+          "attributeStartsWith": "dmx-on",
+          "attribute": "closed",
+          "isValue": true,
+          "actionsPicker": true,
+          "title": "Action:",
+          "type": "text",
+          "help": "Choose the action to execute.",
+          "defaultValue": "",
+          "initDisplay": "none"
+        }
+      ],
+      "allowedOn": {
+        "dmx-select2": true
+      }
+    }
+  ],
+    "static_events": [],
+    actionsScheme: []
 }
