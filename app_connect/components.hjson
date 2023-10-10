@@ -239,7 +239,7 @@
       "icon": "fa fa-lg fa-toggle-on",
       "groupTitle": "Configs",
       "groupIcon": "fa fa-lg fa-cog"
-      "defaultValue": false,
+      "defaultValue": true,
       "help": "Controls whether the dropdown is closed after a selection is made.",
       "allowedOn": {
         "dmx-select2": true

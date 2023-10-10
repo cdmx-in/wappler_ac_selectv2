@@ -16,7 +16,7 @@ dmx.Component("select2", {
     enable_rtl: { type: Boolean, default: false },
     enable_tags: { type: Boolean, default: false },
     select_on_close: { type: Boolean, default: false },
-    close_on_select: { type: Boolean, default: false },
+    close_on_select: { type: Boolean, default: true },
     css_class: { type: String, default: "select2--large" }
   },
   methods: {

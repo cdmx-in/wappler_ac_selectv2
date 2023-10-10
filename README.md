@@ -43,7 +43,7 @@ The Select2 extension module enhances the functionality of the Select module by 
 **Description:** This option enables right-to-left (RTL) text direction for the Select2 element, making it suitable for languages that are read from right to left. (Default: false).
 
 ### `CloseOnSelect`
-**Description:** When enabled, this option will automatically close the Select2 dropdown when an item is selected. (Default: false)
+**Description:** When enabled, this option will automatically close the Select2 dropdown when an item is selected. (Default: true)
 
 ### `SelectOnClose`
 **Description:** If set to true, this option will automatically select the currently highlighted item when the Select2 dropdown is closed. (Default: false)
