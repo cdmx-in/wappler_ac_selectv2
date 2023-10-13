@@ -50,3 +50,13 @@ The Select2 extension module enhances the functionality of the Select module by 
 
 ### `Tags`
 **Description:** Dynamically create new options from text input by the user in the search box. (Default: false)
+
+#### Action Attributes
+
+**Update**
+- Used to call an update on the Select2 element from another element/event listener.
+- Note: This event listener is not seen from the UI Module, you need to manually add `.updatedSelectedData()` from the code view.
+
+**Update**
+- Used to reset Select2 selection from another element/event listener.
+- Note: This event listener is not seen from the UI Module, you need to manually add `.reset()` from the code view.

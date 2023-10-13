@@ -32,6 +32,9 @@ dmx.Component("select2", {
       });
       this.renderSelect();
     },
+    reset: function () {
+      $("#" + this.$node.id).val(null).trigger("change");
+    }
   },
   events: {
     selected: Event,
@@ -65,15 +68,21 @@ dmx.Component("select2", {
       (this.$node.disabled = this.props.disabled),
       $(this.$node).on('select2:close', (e) => {
         this.updateData();
-        this.dispatchEvent('closed');
+        dmx.nextTick(function () {
+          this.dispatchEvent('closed');
+        }, this);
       });
       $(this.$node).on('select2:open', (e) => {
         this.updateData();
-        this.dispatchEvent('opened');
+        dmx.nextTick(function () {
+          this.dispatchEvent('opened');
+        }, this);
       });
       $(this.$node).on('select2:select', (e) => {
         this.updateData();
-        this.dispatchEvent('selected');
+        dmx.nextTick(function () {
+          this.dispatchEvent('selected');
+        }, this);
       });
       this.renderOptions(),
       this.updateData();
