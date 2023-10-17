@@ -90,7 +90,7 @@ dmx.Component("select2", {
       this.updateData();
   },
   update: function (t, e) {
-      e.has("options") && (this.renderOptions(), (this.updateValue = !0)),
+      (this.renderOptions(), (this.updateValue = !0)),
       e.has("value") && (this.updateValue = !0),
       t.disabled != this.props.disabled && (this.$node.disabled = this.props.disabled)
       if ($("#" + this.$node.id).closest(".modal").length > 0) {
