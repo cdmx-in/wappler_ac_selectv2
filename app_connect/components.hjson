@@ -16,7 +16,6 @@
             "outputType": "object",
             "dataPick": true,
             "properties": [],
-            "actionsScheme": [],
             "children": [],
             "allowed_children": {},
             "copyFiles": [
@@ -271,6 +270,21 @@
       "groupIcon": "fa fa-lg fa-cog"
       "defaultValue": false,
       "help": "Dynamically create new options from text input by the user in the search box.",
+      "allowedOn": {
+        "dmx-select2": true
+      }
+    },
+    {
+      "name": "allowClear",
+      "attributeStartsWith": "dmx-bind",
+      "attribute": "allow_clear",
+      "title": "Allow Clear",
+      "type": "boolean",
+      "icon": "fas fa-times",
+      "groupTitle": "Configs",
+      "groupIcon": "fa fa-lg fa-cog"
+      "defaultValue": false,
+      "help": "Allow clearing the Selected value.",
       "allowedOn": {
         "dmx-select2": true
       }
