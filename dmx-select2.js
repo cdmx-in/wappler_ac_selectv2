@@ -88,9 +88,13 @@ dmx.Component("select2", {
       });
       this.renderOptions(),
       this.updateData();
+      dmx.array(this.$node.options).forEach(function (n) {
+        (n.selected = n.value == t), e && (n.defaultSelected = n.selected);
+      });
+      this.renderSelect();
   },
   update: function (t, e) {
-      (this.renderOptions(), (this.updateValue = !0)),
+      e.has("options") && (this.renderOptions(), (this.updateValue = !0)),
       e.has("value") && (this.updateValue = !0),
       t.disabled != this.props.disabled && (this.$node.disabled = this.props.disabled)
       if ($("#" + this.$node.id).closest(".modal").length > 0) {
@@ -111,7 +115,6 @@ dmx.Component("select2", {
   updateData: function (t) {
     dmx.Component("form-element").prototype.updateData.call(this, t);
     var e = this.$node.selectedIndex;
-    
     this.set("selectedIndex", e),
       this.set(
         "selectedValue",
@@ -128,7 +131,7 @@ dmx.Component("select2", {
     this.options.splice(0).forEach(function (t) {
       dmx.dom.remove(t);
     }),
-      this.$node.dataset.placeholder
+      this.props.field_placeholder
         ? this.options.push(
             this.$node.appendChild(document.createElement("option"))
           )
