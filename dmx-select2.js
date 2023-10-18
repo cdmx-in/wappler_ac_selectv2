@@ -86,11 +86,6 @@ dmx.Component("select2", {
           this.dispatchEvent('selected');
         }, this);
       });
-      this.renderOptions(),
-      this.updateData();
-      dmx.array(this.$node.options).forEach(function (n) {
-        (n.selected = n.value == t), e && (n.defaultSelected = n.selected);
-      });
       this.renderSelect();
   },
   update: function (t, e) {
