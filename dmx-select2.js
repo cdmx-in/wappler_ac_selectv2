@@ -89,6 +89,9 @@ dmx.Component("select2", {
       this.renderSelect();
   },
   update: function (t, e) {
+    if (!dmx.equal(t.value, $("#" + this.$node.id).val())) {
+      this.renderSelect();
+      }
     if (!dmx.equal(this.props.field_placeholder, t.field_placeholder)) {
       this.renderSelect();
       }
@@ -101,7 +104,6 @@ dmx.Component("select2", {
             $("#" + this.$node.id).val(selectedValue).trigger('change');
         })
       }
-      this.updateData()
   },
   updated: function () {
     this.updateValue &&
