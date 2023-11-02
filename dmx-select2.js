@@ -86,6 +86,8 @@ dmx.Component("select2", {
           this.dispatchEvent('selected');
         }, this);
       });
+      this.renderOptions(),
+      this.updateData();
   },
   update: function (t, e) {
     if (!dmx.equal(t.value, $("#" + this.$node.id).val())) {
