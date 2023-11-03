@@ -86,6 +86,9 @@ dmx.Component("select2", {
           this.dispatchEvent('selected');
         }, this);
       });
+      dmx.nextTick(function () {
+        this.renderSelect();
+      }, this);
       this.renderOptions(),
       this.updateData();
   },
