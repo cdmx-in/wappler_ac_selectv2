@@ -93,12 +93,9 @@ dmx.Component("select2", {
       this.updateData();
   },
   update: function (t, e) {
-    if (!dmx.equal(t.value, $("#" + this.$node.id).val())) {
-      this.renderSelect();
-      }
-    if (!dmx.equal(this.props.field_placeholder, t.field_placeholder)) {
-      this.renderSelect();
-      }
+    // if (!dmx.equal(t.value, $("#" + this.$node.id).val())) {
+    //   this.renderSelect();
+    //   }
       e.has("options") && (this.renderOptions(), (this.updateValue = !0)),
       e.has("value") && (this.updateValue = !0),
       t.disabled != this.props.disabled && (this.$node.disabled = this.props.disabled)
