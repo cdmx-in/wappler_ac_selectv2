@@ -86,10 +86,17 @@ dmx.Component("select2", {
           this.dispatchEvent('selected');
         }, this);
       });
-      dmx.nextTick(function () {
-        this.renderSelect();
-      }, this);
-      this.renderOptions(),
+      if ($("#" + this.$node.id).closest(".modal").length > 0) {
+        let modalID = $("#" + this.$node.id).closest(".modal").attr("id");
+        console.log(modalID)
+        $("#" + modalID).on("shown.bs.modal", () => {
+          $("#" + this.$node.id).val(selectedValue).trigger('change');
+      })
+    }
+    dmx.nextTick(function () {
+      this.renderSelect();
+    }, this);
+      this.renderOptions();
       this.updateData();
   },
   update: function (t, e) {
@@ -99,18 +106,12 @@ dmx.Component("select2", {
       e.has("options") && (this.renderOptions(), (this.updateValue = !0)),
       e.has("value") && (this.updateValue = !0),
       t.disabled != this.props.disabled && (this.$node.disabled = this.props.disabled)
-      if ($("#" + this.$node.id).closest(".modal").length > 0) {
-          let modalID = $("#" + this.$node.id).closest(".modal").attr("id");
-          $("#" + modalID).on("shown.bs.modal", () => {
-            $("#" + this.$node.id).val(selectedValue).trigger('change');
-        })
-      }
+      
   },
   updated: function () {
     this.updateValue &&
       ((this.updateValue = !1),
       this.setValue(this.props.value, !0),
-      this.renderSelect(),
       this.updateData());
   },
   updateData: function (t) {
