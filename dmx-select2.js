@@ -140,9 +140,10 @@ dmx.Component("select2", {
     dmx.repeatItems(this.props.options).forEach(function (t) {
       "object" != typeof t && (t = { $value: t });
       var e = document.createElement("option");
-      (e.value = Array.isArray(this.props.options)
-        ? dmx.parse(this.props.optionValue, dmx.DataScope(t, this))
-        : t.$key),
+      (e.value = dmx.parse(
+          this.props.optionValue,
+          dmx.DataScope(t, this)
+        )),
         (e.innerText = dmx.parse(
           this.props.optionText,
           dmx.DataScope(t, this)
