@@ -34,7 +34,7 @@ dmx.Component("select2", {
       this.renderSelect();
     },
     reset: function () {
-      $("#" + this.$node.id).val(null).trigger("change");
+      $("#" + this.$node.id).val(null).trigger("select2:close");
     }
   },
   events: {
