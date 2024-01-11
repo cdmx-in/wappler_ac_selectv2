@@ -230,6 +230,21 @@
       }
     },
     {
+      "name": "multiSelect",
+      "attributeStartsWith": "dmx-bind",
+      "attribute": "multiple",
+      "title": "Multi Select",
+      "type": "boolean",
+      "icon": "fa fa-lg fa-align-right",
+      "groupTitle": "Configs",
+      "groupIcon": "fa fa-lg fa-cog"
+      "defaultValue": false,
+      "help": "This option enables multi-select feature for the Select2 element.",
+      "allowedOn": {
+        "dmx-select2": true
+      }
+    },
+    {
       "name": "select2CloseOnSelect",
       "attributeStartsWith": "dmx-bind",
       "attribute": "close_on_select",
