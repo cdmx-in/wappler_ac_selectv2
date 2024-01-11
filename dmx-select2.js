@@ -19,7 +19,7 @@ dmx.Component("select2", {
     select_on_close: { type: Boolean, default: false },
     close_on_select: { type: Boolean, default: true },
     css_class: { type: String, default: "select2--large" },
-    multiple: { type: Boolean, default: true }
+    multiple: { type: Boolean, default: false }
   },
   methods: {
     setSelectedIndex: function (t) {
@@ -62,7 +62,7 @@ dmx.Component("select2", {
         selectionCssClass: this.props.css_class,
         dropdownCssClass: this.props.css_class,
         containerCssClass: this.props.css_class,
-        multiple: this.props.mutliple
+        multiple: this.props.multiple
     });
   }, 
   render: function (node) {
@@ -94,7 +94,7 @@ dmx.Component("select2", {
         if ($("#" + this.$node.id).closest(".modal").length > 0) {
           let modalID = $("#" + this.$node.id).closest(".modal").attr("id");
           $("#" + modalID).on("shown.bs.modal", () => {
-            if(this.props.mutliple){
+            if(this.props.multiple){
               var selectedData = [];
               for (let option in Object.keys(this.$node.selectedOptions)) {
                 if (this.$node.selectedOptions[option].value != "") {
@@ -126,7 +126,7 @@ dmx.Component("select2", {
       this.updateData());
   },
   updateData: function (t) {
-    if(this.props.mutliple){
+    if(this.props.multiple){
       var selectedData = [];
       for (let option in Object.keys(this.$node.selectedOptions)) {
         if (this.$node.selectedOptions[option].value != "") {
