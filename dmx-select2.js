@@ -3,7 +3,8 @@ dmx.Component("select2", {
   initialData: { 
       selectedIndex: -1, 
       selectedValue: "", 
-      selectedText: "" 
+      selectedText: "" ,
+      selectedOptions: []
   },
   tag: "select",
   attributes: {
@@ -88,30 +89,30 @@ dmx.Component("select2", {
           this.dispatchEvent('selected');
         }, this);
       });
-      
+      this.initialData.selectedOptions = this.props.value.split(',')
       dmx.nextTick(function () {
         this.renderSelect();
+    
         if ($("#" + this.$node.id).closest(".modal").length > 0) {
-          let modalID = $("#" + this.$node.id).closest(".modal").attr("id");
-          $("#" + modalID).on("shown.bs.modal", () => {
-            if(this.props.multiple){
-              var selectedData = [];
-              for (let option in Object.keys(this.$node.selectedOptions)) {
-                if (this.$node.selectedOptions[option].value != "") {
-                  selectedData.push(this.$node.selectedOptions[option].value);
+            let modalID = $("#" + this.$node.id).closest(".modal").attr("id");
+            $("#" + modalID).on("shown.bs.modal", () => {
+                if (this.$node.multiple) {
+                    let selectedData = Array.from(this.$node.selectedOptions)
+                        .filter(option => option.value !== "")
+                        .map(option => option.value);
+    
+                    $("#" + this.$node.id).val(selectedData.length === 0 ? this.props.values : selectedData).trigger("change");
+                } else {
+                    $("#" + this.$node.id).val(this.get("selectedValue")).trigger('change');
                 }
-              }
-             $("#" + this.$node.id).val(selectedData).trigger("change");
-            } else {
-              $("#" + this.$node.id).val(this.get("selectedValue")).trigger('change');
-            }
-        })
-      }
+            });
+        }
       }, this);
       this.renderOptions(),
       this.updateData();
   },
   update: function (t, e) {
+    // console.log('set5')
       if (!dmx.equal(this.props.field_placeholder, t.field_placeholder)) {
         this.renderSelect();
         }
@@ -120,21 +121,34 @@ dmx.Component("select2", {
       t.disabled != this.props.disabled && (this.$node.disabled = this.props.disabled)
   },
   updated: function () {
+    // console.log('set4')
     this.updateValue &&
       ((this.updateValue = !1),
       this.setValue(this.props.value, !0),
       this.updateData());
   },
   updateData: function (t) {
-    if(this.props.multiple){
-      var selectedData = [];
-      for (let option in Object.keys(this.$node.selectedOptions)) {
-        if (this.$node.selectedOptions[option].value != "") {
-          selectedData.push(this.$node.selectedOptions[option].value);
+    if (this.props.multiple) {
+        var selectedData = [];
+
+        // Check if the element has the "select2-hidden-accessible" class
+        if (this.$node.classList.contains("select2-hidden-accessible")) {
+            for (var option of this.$node.options) {
+                if (this.initialData.selectedOptions && this.initialData.selectedOptions.includes(option.value)) {
+                    selectedData.push(option.value);
+                }
+            }
+            this.initialData.selectedOptions = null;
         }
-      }
-     $("#" + this.$node.id).val(selectedData).trigger("change");
-    } else {
+        for (var option of this.$node.selectedOptions) {
+            if (option.value !== "") {
+                selectedData.push(option.value);
+            }
+            console.log(selectedData);
+        }
+        $("#" + this.$node.id).val(selectedData).trigger("change");
+    }
+    else {
     dmx.Component("form-element").prototype.updateData.call(this, t);
     var e = this.$node.selectedIndex;
     this.set("selectedIndex", e),
