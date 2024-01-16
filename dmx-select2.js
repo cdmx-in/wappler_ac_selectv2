@@ -89,7 +89,9 @@ dmx.Component("select2", {
           this.dispatchEvent('selected');
         }, this);
       });
-      this.initialData.selectedOptions = this.props.value.split(',')
+      if (this.props.multiple) {
+        this.initialData.selectedOptions = this.props.value.split(',')
+      }
       dmx.nextTick(function () {
         this.renderSelect();
     
@@ -112,7 +114,6 @@ dmx.Component("select2", {
       this.updateData();
   },
   update: function (t, e) {
-    // console.log('set5')
       if (!dmx.equal(this.props.field_placeholder, t.field_placeholder)) {
         this.renderSelect();
         }
@@ -121,7 +122,6 @@ dmx.Component("select2", {
       t.disabled != this.props.disabled && (this.$node.disabled = this.props.disabled)
   },
   updated: function () {
-    // console.log('set4')
     this.updateValue &&
       ((this.updateValue = !1),
       this.setValue(this.props.value, !0),
@@ -144,7 +144,6 @@ dmx.Component("select2", {
             if (option.value !== "") {
                 selectedData.push(option.value);
             }
-            console.log(selectedData);
         }
         $("#" + this.$node.id).val(selectedData).trigger("change");
     }
