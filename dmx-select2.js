@@ -30,10 +30,13 @@ dmx.Component("select2", {
       this.updateData()
     },
     setValue: function (t, e) {
-      dmx.array(this.$node.options).forEach(function (n) {
-        (n.selected = n.value == t), e && (n.defaultSelected = n.selected);
-      });
-      this.renderSelect();
+      if (this.$node.multiple) {
+        const selectedValues = Array.isArray(t) ? t : t.split(',');
+        $("#" + this.$node.id).val(selectedValues).trigger('change');
+    }
+    else {
+      $("#" + this.$node.id).val(t).trigger('change');
+    }
     },
     reset: function () {
       $("#" + this.$node.id).val(null).trigger("select2:close");
