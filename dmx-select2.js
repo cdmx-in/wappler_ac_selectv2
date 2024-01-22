@@ -31,11 +31,16 @@ dmx.Component("select2", {
     },
     setValue: function (t, e) {
       if (this.$node.multiple) {
-        const selectedValues = Array.isArray(t) ? t : t.split(',');
-        $("#" + this.$node.id).val(selectedValues).trigger('change');
+        dmx.nextTick(function () {
+          const selectedValues = Array.isArray(t) ? t : t.split(',');
+          $("#" + this.$node.id).val(selectedValues).trigger('change');
+        }, this);
+        
     }
     else {
-      $("#" + this.$node.id).val(t).trigger('change');
+      dmx.nextTick(function () {
+        $("#" + this.$node.id).val(t).trigger('change');
+      }, this);
     }
     },
     reset: function () {
@@ -138,7 +143,9 @@ dmx.Component("select2", {
         if (this.$node.classList.contains("select2-hidden-accessible")) {
             for (var option of this.$node.options) {
                 if (this.initialData.selectedOptions && this.initialData.selectedOptions.includes(option.value)) {
+                  if (option.value !== "") {
                     selectedData.push(option.value);
+                  }
                 }
             }
             this.initialData.selectedOptions = null;
