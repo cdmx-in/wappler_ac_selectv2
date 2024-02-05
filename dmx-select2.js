@@ -138,24 +138,19 @@ dmx.Component("select2", {
   updateData: function (t) {
     if (this.props.multiple) {
         var selectedData = [];
-
         // Check if the element has the "select2-hidden-accessible" class
         if (this.$node.classList.contains("select2-hidden-accessible")) {
-            for (var option of this.$node.options) {
-                if (this.initialData.selectedOptions && this.initialData.selectedOptions.includes(option.value)) {
-                  if (option.value !== "") {
-                    selectedData.push(option.value);
+            currentSelection = $("#" + this.$node.id).select2('data');
+            for (var option of currentSelection) {
+                  if (option.id !== "") {
+                    selectedData.push(option.id);
                   }
-                }
             }
-            this.initialData.selectedOptions = null;
+            this.set('selectedOptions', selectedData)
+            // this.initialData.selectedOptions = null;
+            $("#" + this.$node.id).val(selectedData).trigger("change");
         }
-        for (var option of this.$node.selectedOptions) {
-            if (option.value !== "") {
-                selectedData.push(option.value);
-            }
-        }
-        $("#" + this.$node.id).val(selectedData).trigger("change");
+        
     }
     else {
     dmx.Component("form-element").prototype.updateData.call(this, t);
