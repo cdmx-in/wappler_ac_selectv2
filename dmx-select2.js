@@ -33,6 +33,7 @@ dmx.Component("select2", {
       if (this.$node.multiple) {
         dmx.nextTick(function () {
           const selectedValues = Array.isArray(t) ? t : t.split(',');
+          this.set('selectedOptions', selectedValues)
           $("#" + this.$node.id).val(selectedValues).trigger('change');
         }, this);
         
@@ -110,7 +111,6 @@ dmx.Component("select2", {
                     let selectedData = Array.from(this.$node.selectedOptions)
                         .filter(option => option.value !== "")
                         .map(option => option.value);
-    
                     $("#" + this.$node.id).val(selectedData.length === 0 ? this.props.values : selectedData).trigger("change");
                 } else {
                     $("#" + this.$node.id).val(this.get("selectedValue")).trigger('change');
