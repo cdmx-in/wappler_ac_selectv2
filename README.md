@@ -1,5 +1,7 @@
 #### Created and Maintained by: Roney Dsilva
 
+# Note: Extension supportes only for AC2.
+
 # Select2 Extension Module for Select Module
 
 The Select2 extension module enhances the functionality of the Select module by providing advanced options for selecting and displaying data.
