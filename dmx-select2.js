@@ -50,7 +50,8 @@ dmx.Component("select2", {
   events: {
     selected: Event,
     opened: Event,
-    closed: Event
+    closed: Event,
+    changed: Event
   },
   renderSelect: function () {
     let dropdown_parent = null;
@@ -128,6 +129,7 @@ dmx.Component("select2", {
 
   performUpdate(e) {
     dmx.Component("form-element").prototype.performUpdate.call(this, e), (e.has("options") || e.has("optiontext") || e.has("optionvalue")) && this._renderOptions()
+    this.dispatchEvent('changed');
     this.renderSelect();
   },
 
