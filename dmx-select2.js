@@ -104,6 +104,12 @@ dmx.Component("select2", {
         this.dispatchEvent('selected');
       }, this);
     });
+    $(this.$node).on('change', (e) => {
+      dmx.nextTick(function () {
+        this.dispatchEvent('changed');
+        this.dispatchEvent('updated');
+      }, this);
+    });
     if (this.props.multiple) {
       this.initialData.selectedOptions = this.props.value.split(',')
     }
@@ -126,10 +132,25 @@ dmx.Component("select2", {
     this.updateData();
     this.$watch('selectedValue', value => this.updateData());
   },
+  _renderOptions () {
+    if (this.props.options && this.props.options.length) {
+      this._options.splice(0).forEach(option => option.remove());
+      this._updatingOptions = true;
+      dmx.repeatItems(this.props.options).forEach(option => {
+        const node = document.createElement('option');
+        node.value = dmx.parse(this.props.optionvalue, dmx.DataScope(option, this));
+        node.textContent = dmx.parse(this.props.optiontext, dmx.DataScope(option, this));
+        if (node.value == this.props.value) node.selected = true;
+        this.$node.append(node);
+        this._options.push(node);
+      });
+      this._updatingOptions = false;
+      this._updateValue();
+    }
+  },
 
   performUpdate(e) {
     dmx.Component("form-element").prototype.performUpdate.call(this, e), (e.has("options") || e.has("optiontext") || e.has("optionvalue")) && this._renderOptions()
-    this.dispatchEvent('changed');
     this.renderSelect();
   },
 
