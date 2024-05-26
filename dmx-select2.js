@@ -104,12 +104,6 @@ dmx.Component("select2", {
         this.dispatchEvent('selected');
       }, this);
     });
-    $(this.$node).on('change', (e) => {
-      dmx.nextTick(function () {
-        this.dispatchEvent('changed');
-        this.dispatchEvent('updated');
-      }, this);
-    });
     if (this.props.multiple) {
       this.initialData.selectedOptions = this.props.value.split(',')
     }
@@ -130,8 +124,12 @@ dmx.Component("select2", {
       }
     }, this);
     this.updateData();
-    this.$watch('selectedValue', value => this.updateData());
-  },
+    this.$watch('selectedValue', value => {
+      if (value !== null && value !== "") {
+          this.dispatchEvent('changed');
+          this.dispatchEvent('updated');
+      }
+  })},
   _renderOptions () {
     if (this.props.options && this.props.options.length) {
       this._options.splice(0).forEach(option => option.remove());
