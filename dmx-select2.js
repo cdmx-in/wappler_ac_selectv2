@@ -7,7 +7,7 @@ dmx.Component("select2", {
     selectedOptions: []
   },
   attributes: {
-    options: { type: Array, default: [] },
+    options: { type: Object, default: {} },
     optionText: { type: String, default: "$value" },
     optionValue: { type: String, default: "$value" },
     field_theme: { type: String, default: "bootstrap-5" },
@@ -131,20 +131,40 @@ dmx.Component("select2", {
       }
   })},
   _renderOptions () {
-    if (this.props.options && this.props.options.length) {
+    if (this.props.options && (Array.isArray(this.props.options) || Object.keys(this.props.options).length > 0)) {
       this._options.splice(0).forEach(option => option.remove());
       this._updatingOptions = true;
-      dmx.repeatItems(this.props.options).forEach(option => {
-        const node = document.createElement('option');
-        node.value = dmx.parse(this.props.optionvalue, dmx.DataScope(option, this));
-        node.textContent = dmx.parse(this.props.optiontext, dmx.DataScope(option, this));
-        if (node.value == this.props.value) node.selected = true;
-        this.$node.append(node);
-        this._options.push(node);
+  
+      const options = this.props.options;
+      const isArray = Array.isArray(options);
+      const optionEntries = isArray ? options : Object.entries(options);
+  
+      optionEntries.forEach(optionEntry => {
+          let key, value;
+          if (isArray) {
+              value = optionEntry;
+          } else {
+              [key, value] = optionEntry;
+              if (typeof value !== "object") {
+                  value = { $value: value };
+              }
+          }
+          const node = document.createElement('option');
+          node.value = isArray 
+              ? dmx.parse(this.props.optionvalue, dmx.DataScope(value, this)) 
+              : (this.props.optionvalue === "$key" ? key : dmx.parse(this.props.optionvalue, dmx.DataScope(value, this)));
+  
+          node.textContent = isArray 
+              ? dmx.parse(this.props.optiontext, dmx.DataScope(value, this)) 
+              : (this.props.optiontext === "$key" ? key : dmx.parse(this.props.optiontext, dmx.DataScope(value, this)));
+  
+          if (node.value == this.props.value) node.selected = true;
+          this.$node.append(node);
+          this._options.push(node);
       });
       this._updatingOptions = false;
       this._updateValue();
-    }
+  }
   },
 
   performUpdate(e) {
