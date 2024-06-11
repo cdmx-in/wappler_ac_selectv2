@@ -152,12 +152,10 @@ dmx.Component("select2", {
           const node = document.createElement('option');
           node.value = isArray 
               ? dmx.parse(this.props.optionvalue, dmx.DataScope(value, this)) 
-              : (this.props.optionvalue === "$key" ? key : dmx.parse(this.props.optionvalue, dmx.DataScope(value, this)));
-  
+              : (dmx.parse(this.props.optionvalue.replace(/\$key/g, `'${key}'`), dmx.DataScope(value, this)));
           node.textContent = isArray 
               ? dmx.parse(this.props.optiontext, dmx.DataScope(value, this)) 
-              : (this.props.optiontext === "$key" ? key : dmx.parse(this.props.optiontext, dmx.DataScope(value, this)));
-  
+              : (dmx.parse(this.props.optiontext.replace(/\$key/g, `'${key}'`), dmx.DataScope(value, this)));
           if (node.value == this.props.value) node.selected = true;
           this.$node.append(node);
           this._options.push(node);
