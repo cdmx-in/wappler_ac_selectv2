@@ -166,7 +166,7 @@ dmx.Component("select2", {
   },
 
   performUpdate(e) {
-    dmx.Component("form-element").prototype.performUpdate.call(this, e), (e.has("options") || e.has("optiontext") || e.has("optionvalue")) && this._renderOptions()
+    dmx.Component("form-element").prototype.performUpdate.call(this, e), (e.has("options") || e.has("optiontext") || e.has("optionvalue")) && dmx.nextTick(function () {this._renderOptions() }, this);
     this.renderSelect();
   },
 
@@ -192,4 +192,4 @@ dmx.Component("select2", {
   },
 });
 
-//Created and Maintained by Roney Dsilva
+//Created and Maintained by Roney Dsilva v0.5.6
