@@ -7,7 +7,7 @@ dmx.Component("select2", {
     selectedOptions: []
   },
   attributes: {
-    options: { type: Object, default: {} },
+    options: { type: [Array, Object, Number], default: null },
     optionText: { type: String, default: "$value" },
     optionValue: { type: String, default: "$value" },
     field_theme: { type: String, default: "bootstrap-5" },
@@ -130,39 +130,19 @@ dmx.Component("select2", {
           this.dispatchEvent('updated');
       }
   })},
-  _renderOptions () {
-    if (this.props.options && (Array.isArray(this.props.options) || Object.keys(this.props.options).length > 0)) {
-      this._options.splice(0).forEach(option => option.remove());
-      this._updatingOptions = true;
-  
-      const options = this.props.options;
-      const isArray = Array.isArray(options);
-      const optionEntries = isArray ? options : Object.entries(options);
-  
-      optionEntries.forEach(optionEntry => {
-          let key, value;
-          if (isArray) {
-              value = optionEntry;
-          } else {
-              [key, value] = optionEntry;
-              if (typeof value !== "object") {
-                  value = { $value: value };
-              }
-          }
-          const node = document.createElement('option');
-          node.value = isArray 
-              ? dmx.parse(this.props.optionvalue, dmx.DataScope(value, this)) 
-              : (dmx.parse(this.props.optionvalue.replace(/\$key/g, `'${key}'`), dmx.DataScope(value, this)));
-          node.textContent = isArray 
-              ? dmx.parse(this.props.optiontext, dmx.DataScope(value, this)) 
-              : (dmx.parse(this.props.optiontext.replace(/\$key/g, `'${key}'`), dmx.DataScope(value, this)));
-          if (node.value == this.props.value) node.selected = true;
-          this.$node.append(node);
-          this._options.push(node);
-      });
-      this._updatingOptions = false;
-      this._updateValue();
-  }
+  _renderOptions() {
+    this._options.forEach((e => e.remove())), 
+    this._options = [], 
+    this.props.options && (this._updatingOptions = !0, 
+      dmx.repeatItems(this.props.options).forEach((e => {
+        const t = document.createElement("option");
+        t.value = dmx.parse(this.props.optionvalue, dmx.DataScope(e, this)), 
+        t.textContent = dmx.parse(this.props.optiontext, dmx.DataScope(e, this)), 
+        t.value == this.props.value && (t.selected = !0), 
+        this.$node.append(t), 
+        this._options.push(t)
+    })), this._updatingOptions = !1), 
+    this._updateValue()
   },
 
   performUpdate(e) {
@@ -192,4 +172,4 @@ dmx.Component("select2", {
   },
 });
 
-//Created and Maintained by Roney Dsilva v0.5.6
+//Created and Maintained by Roney Dsilva v0.5.7
