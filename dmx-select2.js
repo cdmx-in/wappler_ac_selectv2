@@ -126,6 +126,7 @@ dmx.Component("select2", {
     this.updateData();
     this.$watch('selectedValue', value => {
       if (value !== null && value !== "") {
+          $("#" + this.$node.id).val(value).trigger("change")
           this.dispatchEvent('changed');
           this.dispatchEvent('updated');
       }
@@ -162,14 +163,15 @@ dmx.Component("select2", {
           }
         }
         this.set('selectedOptions', selectedData)
-        $("#" + this.$node.id).val(selectedData).trigger("change");
+        if (selectedData.length>0) {
+          $("#" + this.$node.id).val(selectedData).trigger("change")
+        }
       }
     } else {
       this._updateValue();
       selectedValue = this.get("selectedValue");
-      $("#" + this.$node.id).val(selectedValue).trigger('change');
     }
   },
 });
 
-//Created and Maintained by Roney Dsilva v0.5.7
+//Created and Maintained by Roney Dsilva v0.5.8
