@@ -32,12 +32,14 @@ dmx.Component("select2", {
     setValue: function (t, e) {
       if (this.$node.multiple) {
         dmx.nextTick(function () {
+          if (!t) return
           const selectedValues = Array.isArray(t) ? t : t.split(',');
           this.set('selectedOptions', selectedValues)
           $("#" + this.$node.id).val(selectedValues).trigger('change');
         }, this);
 
-      } else {
+      } 
+      else {
         dmx.nextTick(function () {
           $("#" + this.$node.id).val(t).trigger('change');
         }, this);
@@ -87,13 +89,11 @@ dmx.Component("select2", {
     }), dmx.Component("form-element").prototype.init.call(this, e)
     //Below is select2 events
     $(this.$node).on('select2:close', (e) => {
-      this.updateData();
       dmx.nextTick(function () {
         this.dispatchEvent('closed');
       }, this);
     });
     $(this.$node).on('select2:open', (e) => {
-      this.updateData();
       dmx.nextTick(function () {
         this.dispatchEvent('opened');
       }, this);
@@ -164,7 +164,9 @@ dmx.Component("select2", {
         }
         this.set('selectedOptions', selectedData)
         if (selectedData.length>0) {
-          $("#" + this.$node.id).val(selectedData).trigger("change")
+            setTimeout(() => {
+                $("#" + this.$node.id).val(selectedData).trigger("change");
+            }, 10);
         }
       }
     } else {
