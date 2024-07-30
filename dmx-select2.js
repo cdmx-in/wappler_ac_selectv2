@@ -46,6 +46,7 @@ dmx.Component("select2", {
       }
     },
     reset: function () {
+      this.set('selectedOptions', [])
       $("#" + this.$node.id).val(null).trigger("select2:close");
     }
   },
@@ -162,9 +163,9 @@ dmx.Component("select2", {
             selectedData.push(option.id);
           }
         }
-        this.set('selectedOptions', selectedData)
         if (selectedData.length>0) {
             setTimeout(() => {
+                this.set('selectedOptions', selectedData)
                 $("#" + this.$node.id).val(selectedData).trigger("change");
             }, 10);
         }
@@ -176,4 +177,4 @@ dmx.Component("select2", {
   },
 });
 
-//Created and Maintained by Roney Dsilva v0.5.8
+//Created and Maintained by Roney Dsilva v0.5.10
