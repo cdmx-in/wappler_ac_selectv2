@@ -105,6 +105,9 @@ dmx.Component("select2", {
         this.dispatchEvent('selected');
       }, this);
     });
+    $(this.$node).on('select2:unselect', (e) => {
+      this.updateData();
+    });
     if (this.props.multiple) {
       this.initialData.selectedOptions = this.props.value.split(',')
     }
@@ -163,9 +166,9 @@ dmx.Component("select2", {
             selectedData.push(option.id);
           }
         }
+        this.set('selectedOptions', selectedData)
         if (selectedData.length>0) {
             setTimeout(() => {
-                this.set('selectedOptions', selectedData)
                 $("#" + this.$node.id).val(selectedData).trigger("change");
             }, 10);
         }
@@ -177,4 +180,4 @@ dmx.Component("select2", {
   },
 });
 
-//Created and Maintained by Roney Dsilva v0.5.10
+//Created and Maintained by Roney Dsilva v0.5.11
