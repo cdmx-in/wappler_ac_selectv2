@@ -153,6 +153,7 @@ dmx.Component("select2", {
   performUpdate(e) {
     dmx.Component("form-element").prototype.performUpdate.call(this, e), (e.has("options") || e.has("optiontext") || e.has("optionvalue")) && dmx.nextTick(function () {this._renderOptions() }, this);
     this.renderSelect();
+    this.updateData();
   },
 
   updateData: function () {
@@ -180,4 +181,4 @@ dmx.Component("select2", {
   },
 });
 
-//Created and Maintained by Roney Dsilva v0.5.11
+//Created and Maintained by Roney Dsilva v0.5.12
