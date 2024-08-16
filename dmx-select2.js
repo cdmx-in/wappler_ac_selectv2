@@ -36,6 +36,7 @@ dmx.Component("select2", {
           const selectedValues = Array.isArray(t) ? t : t.split(',');
           this.set('selectedOptions', selectedValues)
           $("#" + this.$node.id).val(selectedValues).trigger('change');
+          this.updateData();
         }, this);
 
       } 
@@ -181,4 +182,4 @@ dmx.Component("select2", {
   },
 });
 
-//Created and Maintained by Roney Dsilva v0.5.12
+//Created and Maintained by Roney Dsilva v0.5.13
