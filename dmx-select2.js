@@ -92,8 +92,11 @@ dmx.Component("select2", {
 
     // Add event listener for browser back button
     window.addEventListener('popstate', (event) => {
-      if ($("#" + this.$node.id).data('select2').isOpen()) {
-        $("#" + this.$node.id).select2('close');
+      if (this.$node && this.$node.id) {
+        const select2Instance = $("#" + this.$node.id).data('select2');
+        if (select2Instance && select2Instance.isOpen()) {
+          $("#" + this.$node.id).select2('close');
+        }
       }
     });
 
@@ -190,4 +193,4 @@ dmx.Component("select2", {
   },
 });
 
-//Created and Maintained by Roney Dsilva v0.5.14
+//Created and Maintained by Roney Dsilva v0.5.15
