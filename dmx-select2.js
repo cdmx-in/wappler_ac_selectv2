@@ -89,6 +89,14 @@ dmx.Component("select2", {
       childList: !0,
       attributes: !0
     }), dmx.Component("form-element").prototype.init.call(this, e)
+
+    // Add event listener for browser back button
+    window.addEventListener('popstate', (event) => {
+      if ($("#" + this.$node.id).data('select2').isOpen()) {
+        $("#" + this.$node.id).select2('close');
+      }
+    });
+
     //Below is select2 events
     $(this.$node).on('select2:close', (e) => {
       dmx.nextTick(function () {
@@ -182,4 +190,4 @@ dmx.Component("select2", {
   },
 });
 
-//Created and Maintained by Roney Dsilva v0.5.13
+//Created and Maintained by Roney Dsilva v0.5.14
