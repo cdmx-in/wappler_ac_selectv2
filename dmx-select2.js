@@ -183,7 +183,7 @@ dmx.Component("select2", {
         if (selectedData.length>0) {
             setTimeout(() => {
                 $("#" + this.$node.id).val(selectedData).trigger("change");
-            }, 50);
+            }, 100);
         }
       }
     } else {
@@ -193,4 +193,4 @@ dmx.Component("select2", {
   },
 });
 
-//Created and Maintained by Roney Dsilva v0.5.16
+//Created and Maintained by Roney Dsilva v0.5.17
