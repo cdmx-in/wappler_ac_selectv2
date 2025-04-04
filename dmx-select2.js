@@ -120,6 +120,7 @@ dmx.Component("select2", {
       }, this);
     });
     $(this.$node).on('select2:unselect', (e) => {
+      this.initialData.selectedOptions = this.initialData.selectedOptions.filter(n => n != e.params.data.id);
       this.updateData();
     });
     dmx.nextTick(function () {
@@ -142,11 +143,12 @@ dmx.Component("select2", {
     this.updateData();
     this.$watch('selectedValue', value => {
       if (value !== null && value !== "") {
-            $("#" + this.$node.id).val(value).trigger("change")
+        $("#" + this.$node.id).val(value).trigger("change")
         this.dispatchEvent('changed');
         this.dispatchEvent('updated');
       }
-    })},
+    })
+  },
   _renderOptions() {
     this._options.forEach((e => e.remove())),
       this._options = [],
@@ -169,38 +171,42 @@ dmx.Component("select2", {
         : (this.props.value || "").split(",");
 
       if (valueArray.length === 0) return;
-  
+
       this.updateData();
     }
-  
+
     // Call the base performUpdate method
     dmx.Component("form-element").prototype.performUpdate.call(this, e);
-  
+
     // Re-render options if relevant properties have changed
     if (e.has("options") || e.has("optiontext") || e.has("optionvalue")) {
       dmx.nextTick(this._renderOptions, this);
     }
-  
+
     // Refresh select UI and update data
     this.renderSelect();
     this.updateData();
   },
   _inputHandler(e) {},
   _changeHandler(e) {
-      if (!this.$node) return; 
-      if (this.$node.dirty) {
-        this._validate();
+    if (!this.$node) return;
+    if (this.$node.dirty) {
+      this._validate();
+    }
+    dmx.nextTick(() => {
+      if (this.data.selectedIndex !== this.$node?.selectedIndex) {
+        this._updateValue();
+        this.dispatchEvent("changed");
+        dmx.nextTick(() => this.dispatchEvent("updated"));
       }
-      dmx.nextTick(() => {
-        if (this.data.selectedIndex !== this.$node?.selectedIndex) {
-          this._updateValue();
-          this.dispatchEvent("changed");
-          dmx.nextTick(() => this.dispatchEvent("updated"));
-        }
-      });
+    });
   },
   updateData: function () {
     if (this.props.multiple) {
+      if (this.props.value) {
+        this.initialData.selectedOptions = Array.isArray(this.props.value) ? this.props.value : this.props.value.split(',');
+        this.props.value = null;
+      }
       var selectedData = [];
       // Check if the element has the "select2-hidden-accessible" class
       if (this.$node.classList.contains("select2-hidden-accessible")) {
@@ -210,20 +216,20 @@ dmx.Component("select2", {
             selectedData.push(option.id);
           }
         }
-        this.set('selectedOptions', selectedData)
-        const selectedDataFinal = selectedData.length > 0 
-        ? selectedData 
-        : (this.$node.multiple 
-            ? (Array.isArray(this.props.value) 
-                ? this.props.value 
-                : this.props.value.split(',')) 
+        
+        const selectedDataFinal = selectedData.length > 0
+          ? selectedData
+          : (this.initialData.selectedOptions.length > 0
+            ? (Array.isArray(this.initialData.selectedOptions)
+              ? this.initialData.selectedOptions
+              : this.initialData.selectedOptions.split(','))
             : []);
-
+        this.set('selectedOptions', selectedDataFinal)
         if (selectedDataFinal.length > 0) {
           setTimeout(() => {
             $("#" + this.$node.id).val(selectedDataFinal).trigger("change");
           }, 100);
-      }
+        }
       }
     } else {
       this._updateValue();
@@ -232,4 +238,4 @@ dmx.Component("select2", {
   },
 });
 
-//Created and Maintained by Roney Dsilva v0.5.18
+//Created and Maintained by Roney Dsilva v0.5.19
