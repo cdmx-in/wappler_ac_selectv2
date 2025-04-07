@@ -216,9 +216,16 @@ dmx.Component("select2", {
             selectedData.push(option.id);
           }
         }
-        
+
         const selectedDataFinal = selectedData.length > 0
-          ? selectedData
+          ? [
+            ...new Set([
+              ...selectedData,
+              ...(Array.isArray(this.initialData.selectedOptions)
+                ? this.initialData.selectedOptions
+                : this.initialData.selectedOptions.split(','))
+            ])
+          ]
           : (this.initialData.selectedOptions.length > 0
             ? (Array.isArray(this.initialData.selectedOptions)
               ? this.initialData.selectedOptions
@@ -238,4 +245,4 @@ dmx.Component("select2", {
   },
 });
 
-//Created and Maintained by Roney Dsilva v0.5.19
+//Created and Maintained by Roney Dsilva v0.5.20
