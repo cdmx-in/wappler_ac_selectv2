@@ -84,8 +84,8 @@ dmx.Component("select2", {
   },
   init: function (e) {
     if (!this.$node) return
-    this._options = [], this.props.value || (this.props.value = this.$node.value, this._updateValue()), this._mutationObserver = new MutationObserver((() => {
-      this._updatingOptions || this._updateValue()
+    this._options = [], this.props.value || (this.props.value = this.$node.value, this.updateData()), this._mutationObserver = new MutationObserver((() => {
+      this._updatingOptions || this.updateData()
     })), this._mutationObserver.observe(this.$node, {
       subtree: !0,
       childList: !0,
@@ -125,7 +125,7 @@ dmx.Component("select2", {
     });
     dmx.nextTick(function () {
       this.renderSelect();
-      if (!this.$node) return
+      if (!this.$node || !this.$node.id) return
       if ($("#" + this.$node.id).closest(".modal").length > 0) {
         let modalID = $("#" + this.$node.id).closest(".modal").attr("id");
         $("#" + modalID).on("shown.bs.modal", () => {
@@ -142,7 +142,7 @@ dmx.Component("select2", {
     }, this);
     this.updateData();
     this.$watch('selectedValue', value => {
-      if (value !== null && value !== "") {
+      if (value !== null && value !== "" && this.$node && this.$node.id) {
         $("#" + this.$node.id).val(value).trigger("change")
         this.dispatchEvent('changed');
         this.dispatchEvent('updated');
@@ -161,26 +161,21 @@ dmx.Component("select2", {
             this.$node.append(t),
             this._options.push(t)
         })), this._updatingOptions = !1),
-      this._updateValue()
+      this.updateData()
   },
 
   performUpdate(e) {
     if (this.$node.multiple) {
-      const valueArray = Array.isArray(this.props.value)
-        ? this.props.value
-        : (this.props.value || "").split(",");
+      dmx.Component("select").prototype.performUpdate.call(this, e), e.has("value") && this._setValue(this.props.value, !0)
+    } else {
 
-      if (valueArray.length === 0) return;
+      // Call the base performUpdate method
+      dmx.Component("form-element").prototype.performUpdate.call(this, e);
 
-      this.updateData();
-    }
-
-    // Call the base performUpdate method
-    dmx.Component("form-element").prototype.performUpdate.call(this, e);
-
-    // Re-render options if relevant properties have changed
-    if (e.has("options") || e.has("optiontext") || e.has("optionvalue")) {
-      dmx.nextTick(this._renderOptions, this);
+      // Re-render options if relevant properties have changed
+      if (e.has("options") || e.has("optiontext") || e.has("optionvalue")) {
+        dmx.nextTick(this._renderOptions, this);
+      }
     }
 
     // Refresh select UI and update data
@@ -193,13 +188,15 @@ dmx.Component("select2", {
     if (this.$node.dirty) {
       this._validate();
     }
-    dmx.nextTick(() => {
+    dmx.nextTick(function () {
       if (this.data.selectedIndex !== this.$node?.selectedIndex) {
-        this._updateValue();
+        this.updateData();
         this.dispatchEvent("changed");
-        dmx.nextTick(() => this.dispatchEvent("updated"));
+        dmx.nextTick(function () {
+          this.dispatchEvent("updated");
+        }, this);
       }
-    });
+    }, this);
   },
   updateData: function () {
     if (this.props.multiple) {
@@ -233,9 +230,10 @@ dmx.Component("select2", {
             : []);
         this.set('selectedOptions', selectedDataFinal)
         if (selectedDataFinal.length > 0) {
-          setTimeout(() => {
+          dmx.nextTick(function () {
+            if (!this.$node || !this.$node.id) return
             $("#" + this.$node.id).val(selectedDataFinal).trigger("change");
-          }, 100);
+          }, this);
         }
       }
     } else {
@@ -245,4 +243,4 @@ dmx.Component("select2", {
   },
 });
 
-//Created and Maintained by Roney Dsilva v0.5.20
+//Created and Maintained by Roney Dsilva v0.5.21
