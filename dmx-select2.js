@@ -24,10 +24,10 @@ dmx.Component("select2", {
   methods: {
     setSelectedIndex: function (t) {
       (this.$node.selectedIndex = t),
-        this.updateData()
+        this._updateValue()
     },
     updatedSelectedData: function () {
-      this.updateData()
+      this._updateValue()
     },
     setValue: function (t, e) {
       if (this.$node.multiple) {
@@ -36,7 +36,7 @@ dmx.Component("select2", {
           const selectedValues = Array.isArray(t) ? t : t.split(',');
           this.set('selectedOptions', selectedValues)
           $("#" + this.$node.id).val(selectedValues).trigger('change');
-          this.updateData();
+          this._updateValue();
         }, this);
 
       }
@@ -80,12 +80,12 @@ dmx.Component("select2", {
       multiple: this.props.multiple
     });
     (this.props.field_placeholder && this.props.value == "")
-     ? $("#" + this.$node.id).val('').trigger('change'):  null
+      ? $("#" + this.$node.id).val('').trigger('change') : null
   },
   init: function (e) {
     if (!this.$node) return
-    this._options = [], this.props.value || (this.props.value = this.$node.value, this.updateData()), this._mutationObserver = new MutationObserver((() => {
-      this._updatingOptions || this.updateData()
+    this._options = [], this.props.value || (this.props.value = this.$node.value, this._updateValue()), this._mutationObserver = new MutationObserver((() => {
+      this._updatingOptions || this._updateValue()
     })), this._mutationObserver.observe(this.$node, {
       subtree: !0,
       childList: !0,
@@ -114,18 +114,18 @@ dmx.Component("select2", {
       }, this);
     });
     $(this.$node).on('select2:select', (e) => {
-      this.updateData();
+      this._updateValue();
       dmx.nextTick(function () {
         this.dispatchEvent('selected');
       }, this);
     });
     $(this.$node).on('select2:unselect', (e) => {
       this.initialData.selectedOptions = this.initialData.selectedOptions.filter(n => n != e.params.data.id);
-      this.updateData();
+      this._updateValue();
     });
     dmx.nextTick(function () {
       this.renderSelect();
-      if (!this.$node || !this.$node.id) return
+      if (!this.$node) return
       if ($("#" + this.$node.id).closest(".modal").length > 0) {
         let modalID = $("#" + this.$node.id).closest(".modal").attr("id");
         $("#" + modalID).on("shown.bs.modal", () => {
@@ -140,9 +140,9 @@ dmx.Component("select2", {
         });
       }
     }, this);
-    this.updateData();
+    this._updateValue();
     this.$watch('selectedValue', value => {
-      if (value !== null && value !== "" && this.$node && this.$node.id) {
+      if (value !== null && value !== "" && this.$node) {
         $("#" + this.$node.id).val(value).trigger("change")
         this.dispatchEvent('changed');
         this.dispatchEvent('updated');
@@ -161,7 +161,53 @@ dmx.Component("select2", {
             this.$node.append(t),
             this._options.push(t)
         })), this._updatingOptions = !1),
-      this.updateData()
+      this._updateValue()
+  },
+
+  _setValue(e, t) {
+    if (this.$node.multiple) {
+      e = Array.isArray(e)
+        ? e
+        : (e || "").split(",");
+      e = e.filter(n => n)
+      null == e && (e = ""), Array.isArray(e) || (e = [e]), e = e.map((e => e.toString())), Array.from(this.$node.options).forEach((s => {
+        const n = e.includes(s.value);
+        t ? (s.toggleAttribute("selected", n), s.defaultSelected = s.selected) : s.selected = n
+      })), this._updateValue(), dmx.nextTick((() => this.dispatchEvent("updated")))
+    } else {
+      if (null == e && (e = ""), e = e.toString(), t) Array.from(this.$node.options).forEach((t => {
+        t.toggleAttribute("selected", t.value == e), t.defaultSelected = t.selected
+      }));
+      else {
+        const t = Array.from(this.$node.options).findIndex((t => t.value == e));
+        this.$node.selectedIndex = t
+      }
+      this._updateValue(), dmx.nextTick((() => this.dispatchEvent("updated")))
+    }
+  },
+  _updateValue() {
+    if (this.$node.multiple) {
+      const e = this._getValue();
+      if (this.$node && this.$node.id) {
+        $("#" + this.$node.id).val(e).trigger("change");
+      }
+    } else {
+      const e = this.$node.selectedIndex,
+        t = this.$node.options[e] || {
+          value: "",
+          text: ""
+        };
+
+      this.set({
+        selectedIndex: e,
+        selectedValue: t.value,
+        selectedText: t.text,
+        value: t.value
+      })
+    }
+  },
+  _getValue() {
+    return Array.from(this.$node.selectedOptions).map((e => e.value))
   },
 
   performUpdate(e) {
@@ -180,67 +226,27 @@ dmx.Component("select2", {
 
     // Refresh select UI and update data
     this.renderSelect();
-    this.updateData();
+    this._updateValue();
   },
-  _inputHandler(e) {},
+  _inputHandler(e) { },
   _changeHandler(e) {
-    if (!this.$node) return;
+
+    if (!this.$node) return
     if (this.$node.dirty) {
       this._validate();
     }
-    dmx.nextTick(function () {
-      if (this.data.selectedIndex !== this.$node?.selectedIndex) {
-        this.updateData();
-        this.dispatchEvent("changed");
-        dmx.nextTick(function () {
-          this.dispatchEvent("updated");
-        }, this);
-      }
-    }, this);
-  },
-  updateData: function () {
-    if (this.props.multiple) {
-      if (this.props.value) {
-        this.initialData.selectedOptions = Array.isArray(this.props.value) ? this.props.value : this.props.value.split(',');
-        this.props.value = null;
-      }
-      var selectedData = [];
-      // Check if the element has the "select2-hidden-accessible" class
-      if (this.$node.classList.contains("select2-hidden-accessible")) {
-        currentSelection = $("#" + this.$node.id).select2('data');
-        for (var option of currentSelection) {
-          if (option.id !== "") {
-            selectedData.push(option.id);
-          }
-        }
-
-        const selectedDataFinal = selectedData.length > 0
-          ? [
-            ...new Set([
-              ...selectedData,
-              ...(Array.isArray(this.initialData.selectedOptions)
-                ? this.initialData.selectedOptions
-                : this.initialData.selectedOptions.split(','))
-            ])
-          ]
-          : (this.initialData.selectedOptions.length > 0
-            ? (Array.isArray(this.initialData.selectedOptions)
-              ? this.initialData.selectedOptions
-              : this.initialData.selectedOptions.split(','))
-            : []);
-        this.set('selectedOptions', selectedDataFinal)
-        if (selectedDataFinal.length > 0) {
-          dmx.nextTick(function () {
-            if (!this.$node || !this.$node.id) return
-            $("#" + this.$node.id).val(selectedDataFinal).trigger("change");
-          }, this);
-        }
-      }
+    if (this.$node.multiple) {
+      dmx.nextTick((() => {
+        if (!this.$node) return
+        this.data.selectedIndex === this.$node.selectedIndex && dmx.equal(this.data.value, this._getValue()) || (this._updateValue(), this.dispatchEvent("changed"), dmx.nextTick((() => this.dispatchEvent("updated"))))
+      }))
     } else {
-      this._updateValue();
-      selectedValue = this.get("selectedValue");
+      dmx.nextTick((() => {
+        if (!this.$node) return
+        this.data.selectedIndex !== this.$node.selectedIndex && (this._updateValue(), this.dispatchEvent("changed"), dmx.nextTick((() => this.dispatchEvent("updated"))))
+      }))
     }
   },
 });
 
-//Created and Maintained by Roney Dsilva v0.5.21
+//Created and Maintained by Roney Dsilva v0.6.0
