@@ -187,7 +187,8 @@ dmx.Component("select2", {
   },
   _updateValue() {
     if (this.$node.multiple) {
-      const e = this._getValue();
+      let e = this._getValue();
+      e = e.filter(n => n);
       if (this.$node && this.$node.id) {
         $("#" + this.$node.id).val(e).trigger("change");
       }
@@ -249,4 +250,4 @@ dmx.Component("select2", {
   },
 });
 
-//Created and Maintained by Roney Dsilva v0.6.0
+//Created and Maintained by Roney Dsilva v0.6.1
