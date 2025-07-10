@@ -288,6 +288,48 @@
       "allowedOn": {
         "dmx-select2": true
       }
+    },
+    {
+      "name": "customCss",
+      "attribute": "custom_css",
+      "title": "Custom CSS Options",
+      "type": "boolean",
+      "display": "fieldset",
+      "icon": "fas fa-palette",
+      "groupTitle": "Configs",
+      "groupIcon": "fa fa-lg fa-cog",
+      "defaultValue": false,
+      "noChangeOnHide": true,
+      "groupEnabler": true,
+      "children": [
+        {
+          "name": "selectionCss",
+          "attribute": "selection_css",
+          "title": "Selection CSS Class",
+          "type": "text",
+          "defaultValue": "",
+          "help": "Additional class for the selection area"
+        },
+        {
+          "name": "dropdownCss",
+          "attribute": "dropdown_css",
+          "title": "Dropdown CSS Class",
+          "type": "text",
+          "defaultValue": "",
+          "help": "Additional class for the dropdown"
+        },
+        {
+          "name": "containerCss",
+          "attribute": "container_css",
+          "title": "Container CSS Class",
+          "type": "text",
+          "defaultValue": "",
+          "help": "Additional class for the outer container"
+        }
+      ],
+      "allowedOn": {
+        "dmx-select2": true
+      }
     }
     ],
     "events": [

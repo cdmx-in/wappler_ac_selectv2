@@ -19,6 +19,9 @@ dmx.Component("select2", {
     select_on_close: { type: Boolean, default: false },
     close_on_select: { type: Boolean, default: true },
     css_class: { type: String, default: "select2--large" },
+    selection_css: { type: String, default: null },
+    dropdown_css: { type: String, default: null },
+    container_css: { type: String, default: null },
     multiple: { type: Boolean, default: false }
   },
   methods: {
@@ -64,6 +67,10 @@ dmx.Component("select2", {
     if ($("#" + this.$node.id).closest(".modal").length > 0) {
       dropdown_parent = $(this.$node).parent().parent();
     }
+    const selectionClass = `${this.props.css_class} ${this.props.selection_css}`.trim();
+    const dropdownClass = `${this.props.css_class} ${this.props.dropdown_css}`.trim();
+    const containerClass = `${this.props.css_class} ${this.props.container_css}`.trim();
+
     $("#" + this.$node.id).select2({
       theme: this.props.field_theme,
       width: this.props.field_width,
@@ -74,9 +81,9 @@ dmx.Component("select2", {
       closeOnSelect: this.props.close_on_select,
       placeholder: this.props.field_placeholder,
       dropdownParent: dropdown_parent,
-      selectionCssClass: this.props.css_class,
-      dropdownCssClass: this.props.css_class,
-      containerCssClass: this.props.css_class,
+      selectionCssClass: selectionClass,
+      dropdownCssClass: dropdownClass,
+      containerCssClass: containerClass,
       multiple: this.props.multiple
     });
     (this.props.field_placeholder && this.props.value == "")

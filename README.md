@@ -1,6 +1,4 @@
-#### Created and Maintained by: Roney Dsilva
-
-# Note: Extension supportes only for AC2.
+#### Created and Maintained by: Codemax IT Solutions Pvt. Ltd.
 
 # Select2 Extension Module for Select Module
 
