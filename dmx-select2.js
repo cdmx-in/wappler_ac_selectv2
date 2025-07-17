@@ -127,6 +127,7 @@ dmx.Component("select2", {
       }, this);
     });
     $(this.$node).on('select2:unselect', (e) => {
+      // Remove empty values from selection
       this.initialData.selectedOptions = this.initialData.selectedOptions.filter(n => n != e.params.data.id);
       this._updateValue();
     });
@@ -194,6 +195,9 @@ dmx.Component("select2", {
   },
   _updateValue() {
     if (this.$node.multiple) {
+      let selectedValues = $(this.$node).val();
+      // Normalize to array and filter empty values
+      this.set('selectedOptions', Array.isArray(selectedValues) ? selectedValues.filter(Boolean) : [selectedValues].filter(Boolean));
       let e = this._getValue();
       e = e.filter(n => n);
       if (this.$node && this.$node.id) {
@@ -257,4 +261,4 @@ dmx.Component("select2", {
   },
 });
 
-//Created and Maintained by Roney Dsilva v0.6.1
+//Created and Maintained by Roney Dsilva v0.6.3
