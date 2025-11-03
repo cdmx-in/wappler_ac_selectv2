@@ -46,6 +46,7 @@ dmx.Component("select2", {
       else {
         dmx.nextTick(function () {
           $("#" + this.$node.id).val(t).trigger('change');
+          this._updateValue();
         }, this);
       }
     },

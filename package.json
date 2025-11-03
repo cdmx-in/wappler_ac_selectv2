@@ -1,6 +1,6 @@
 {
     "name": "@cdmx/wappler_ac_selectv2",
-    "version": "0.6.3",
+    "version": "0.6.4",
     "type": "module",
     "description": "App Connect extension for Select2",
     "license": "MIT",
