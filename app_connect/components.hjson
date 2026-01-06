@@ -290,6 +290,39 @@
       }
     },
     {
+      "name": "searchThreshold",
+      "attributeStartsWith": "dmx-bind",
+      "attribute": "search_threshold",
+      "title": "Search Box",
+      "type": "boolean",
+      "display": "fieldset",
+      "icon": "fa fa-lg fa-search",
+      "groupTitle": "Accessibility",
+      "groupIcon": "fa fa-lg fa-universal-access",
+      "defaultValue": false,
+      "show": [
+        "searchThresholdConfig"
+      ],
+      "noChangeOnHide": true,
+      "groupEnabler": true,
+      "children": [
+        {
+          "name": "searchThresholdConfig",
+          "attributeStartsWith": "dmx-bind",
+          "attribute": "minimum_results_for_search",
+          "dataBindings": true,
+          "title": "Min Results for Search:",
+          "type": "number",
+          "help": "Minimum number of results required to show the search box. Set to 0 to always show search (recommended for keyboard accessibility). Set to -1 or Infinity to hide search.",
+          "defaultValue": 0,
+          "initDisplay": "none"
+        }
+      ],
+      "allowedOn": {
+        "dmx-select2": true
+      }
+    },
+    {
       "name": "customCss",
       "attribute": "custom_css",
       "title": "Custom CSS Options",
