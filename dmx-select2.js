@@ -62,6 +62,43 @@ dmx.Component("select2", {
     closed: Event,
     changed: Event
   },
+  _attachFocusHandlers: function() {
+    // Attach focus handlers to open dropdown on focus (for TAB navigation and direct focus)
+    if (!this.$node || !this.$node.id) return;
+    
+    const $select2 = $("#" + this.$node.id);
+    const select2Instance = $select2.data('select2');
+    
+    if (!select2Instance) return;
+    
+    // Remove previous handlers to avoid duplicates
+    $select2.off('focus.autoopen');
+    if (select2Instance.$container) {
+      select2Instance.$container.find('.select2-selection').off('focus.autoopen');
+    }
+    
+    // Add focus handler on the original select element
+    const openDropdown = function() {
+      const instance = $select2.data('select2');
+      if (instance && !instance.isOpen()) {
+        $select2.select2('open');
+      }
+    };
+    
+    $select2.on('focus.autoopen', openDropdown);
+    
+    // ALSO attach to the Select2 selection container (for TAB navigation)
+    if (select2Instance.$container) {
+      const $selection = select2Instance.$container.find('.select2-selection');
+      $selection.on('focus.autoopen', function() {
+        const instance = $select2.data('select2');
+        if (instance && !instance.isOpen()) {
+          $select2.select2('open');
+        }
+      });
+    }
+  },
+
   renderSelect: function () {
     let dropdown_parent = null;
     // Check if the parent of the element is a modal
@@ -146,11 +183,13 @@ dmx.Component("select2", {
       }, 0);
     });
 
-    // Setup keyboard navigation on the Select2 container
-    this._setupKeyboardNavigation();
 
     dmx.nextTick(function () {
       this.renderSelect();
+      
+      // Attach focus handlers after Select2 is initialized
+      this._attachFocusHandlers();
+      
       if (!this.$node) return
       if ($("#" + this.$node.id).closest(".modal").length > 0) {
         let modalID = $("#" + this.$node.id).closest(".modal").attr("id");
@@ -257,6 +296,9 @@ dmx.Component("select2", {
     // Refresh select UI and update data
     this.renderSelect();
     this._updateValue();
+    
+    // Re-attach focus handlers after performUpdate
+    this._attachFocusHandlers();
   },
   _inputHandler(e) { },
   _changeHandler(e) {
@@ -277,140 +319,6 @@ dmx.Component("select2", {
       }))
     }
   },
-
-  // Keyboard navigation setup for accessibility
-  _setupKeyboardNavigation: function() {
-    const self = this;
-
-    // Wait for Select2 to be initialized, then setup keyboard handlers
-    dmx.nextTick(function() {
-      if (!self.$node || !self.$node.id) return;
-
-      const $select2 = $("#" + self.$node.id);
-      const select2Instance = $select2.data('select2');
-
-      if (!select2Instance) {
-        // Retry after a short delay if Select2 isn't ready yet
-        setTimeout(() => self._setupKeyboardNavigation(), 100);
-        return;
-      }
-
-      const $container = select2Instance.$container;
-      if (!$container || !$container.length) return;
-
-      // Ensure the selection container is focusable via Tab
-      const $selection = $container.find('.select2-selection');
-      if ($selection.length && !$selection.attr('tabindex')) {
-        $selection.attr('tabindex', '0');
-      }
-
-      // Handle keydown events on the selection for keyboard navigation
-      $selection.off('keydown.select2keyboard').on('keydown.select2keyboard', function(evt) {
-        const isOpen = select2Instance.isOpen();
-        const key = evt.which || evt.keyCode;
-
-        // Key codes
-        const KEYS = {
-          TAB: 9,
-          ENTER: 13,
-          ESC: 27,
-          SPACE: 32,
-          UP: 38,
-          DOWN: 40
-        };
-
-        // If dropdown is closed, handle keyboard to open it
-        if (!isOpen) {
-          switch (key) {
-            case KEYS.ENTER:
-            case KEYS.SPACE:
-            case KEYS.DOWN:
-            case KEYS.UP:
-              // Open dropdown on Enter, Space, or Arrow keys
-              evt.preventDefault();
-              evt.stopPropagation();
-              $select2.select2('open');
-              return false;
-
-            case KEYS.TAB:
-              // Allow Tab to move to next element (default behavior)
-              return true;
-
-            case KEYS.ESC:
-              // Do nothing if already closed
-              return true;
-
-            default:
-              // For printable characters, open dropdown and type into search
-              if (self._isPrintableKey(key, evt)) {
-                evt.preventDefault();
-                evt.stopPropagation();
-                $select2.select2('open');
-
-                // Forward the character to the search field
-                setTimeout(function() {
-                  const searchField = document.querySelector('.select2-container--open .select2-search__field');
-                  if (searchField) {
-                    searchField.focus();
-                    // Simulate the keystroke in the search field
-                    const char = self._getCharFromKeyCode(key, evt);
-                    if (char) {
-                      searchField.value = char;
-                      // Trigger input event to start filtering
-                      const inputEvent = new Event('input', { bubbles: true, cancelable: true });
-                      searchField.dispatchEvent(inputEvent);
-                    }
-                  }
-                }, 0);
-                return false;
-              }
-              break;
-          }
-        }
-      });
-    }, this);
-  },
-
-  // Check if the key pressed is a printable character
-  _isPrintableKey: function(keyCode, evt) {
-    // Skip if modifier keys are pressed (except shift for uppercase)
-    if (evt.ctrlKey || evt.altKey || evt.metaKey) {
-      return false;
-    }
-
-    // Alphanumeric keys (A-Z, 0-9)
-    if ((keyCode >= 65 && keyCode <= 90) || (keyCode >= 48 && keyCode <= 57)) {
-      return true;
-    }
-
-    // Numpad numbers
-    if (keyCode >= 96 && keyCode <= 105) {
-      return true;
-    }
-
-    return false;
-  },
-
-  // Convert keyCode to character
-  _getCharFromKeyCode: function(keyCode, evt) {
-    // A-Z
-    if (keyCode >= 65 && keyCode <= 90) {
-      const char = String.fromCharCode(keyCode);
-      return evt.shiftKey ? char : char.toLowerCase();
-    }
-
-    // 0-9
-    if (keyCode >= 48 && keyCode <= 57) {
-      return String.fromCharCode(keyCode);
-    }
-
-    // Numpad 0-9
-    if (keyCode >= 96 && keyCode <= 105) {
-      return String.fromCharCode(keyCode - 48);
-    }
-
-    return null;
-  }
 });
 
-//Created and Maintained by Roney Dsilva v0.6.3
+//Created and Maintained by Roney Dsilva v0.6.6
