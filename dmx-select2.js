@@ -77,11 +77,27 @@ dmx.Component("select2", {
       select2Instance.$container.find('.select2-selection').off('focus.autoopen');
     }
     
+    const isMultiple = this.props.multiple;
+    let interactionInProgress = false;
+    
     // Add focus handler on the original select element
     const openDropdown = function() {
+      if (isMultiple && interactionInProgress) return;
+      
       const instance = $select2.data('select2');
       if (instance && !instance.isOpen()) {
-        $select2.select2('open');
+        // For multiselect, add a small delay to avoid conflicts with selection events
+        if (isMultiple) {
+          setTimeout(() => {
+            if (interactionInProgress) return;
+            const inst = $select2.data('select2');
+            if (inst && !inst.isOpen()) {
+              $select2.select2('open');
+            }
+          }, 50);
+        } else {
+          $select2.select2('open');
+        }
       }
     };
     
@@ -91,11 +107,44 @@ dmx.Component("select2", {
     if (select2Instance.$container) {
       const $selection = select2Instance.$container.find('.select2-selection');
       $selection.on('focus.autoopen', function() {
+        if (isMultiple && interactionInProgress) return;
+        
         const instance = $select2.data('select2');
         if (instance && !instance.isOpen()) {
-          $select2.select2('open');
+          // For multiselect, add a small delay to avoid conflicts
+          if (isMultiple) {
+            setTimeout(() => {
+              if (interactionInProgress) return;
+              const inst = $select2.data('select2');
+              if (inst && !inst.isOpen()) {
+                $select2.select2('open');
+              }
+            }, 50);
+          } else {
+            $select2.select2('open');
+          }
         }
       });
+      
+      // For multiselect, attach to the search field inside the selection
+      // (This is what receives focus during TAB navigation)
+      if (isMultiple) {
+        const $searchField = $selection.find('.select2-search__field');
+        $searchField.on('focus.autoopen', function() {
+          if (interactionInProgress) return;
+          
+          const instance = $select2.data('select2');
+          if (instance && !instance.isOpen()) {
+            setTimeout(() => {
+              if (interactionInProgress) return;
+              const inst = $select2.data('select2');
+              if (inst && !inst.isOpen()) {
+                $select2.select2('open');
+              }
+            }, 50);
+          }
+        });
+      }
     }
   },
 
@@ -321,4 +370,4 @@ dmx.Component("select2", {
   },
 });
 
-//Created and Maintained by Roney Dsilva v0.6.6
+//Created and Maintained by Roney Dsilva v0.6.7
