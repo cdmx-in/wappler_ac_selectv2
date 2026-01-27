@@ -1,12 +1,12 @@
 {
     "name": "@cdmx/wappler_ac_selectv2",
-    "version": "0.6.7",
+    "version": "0.6.8",
     "type": "module",
     "description": "App Connect extension for Select2",
     "license": "MIT",
     "author": {
-        "name": "cdmx1",
-        "url": "https://github.com/cdmx1"
+        "name": "cdmx-in",
+        "url": "https://github.com/cdmx-in"
     },
     "keywords": [
         "wappler-extension",

@@ -63,7 +63,7 @@ dmx.Component("select2", {
     changed: Event
   },
   _attachFocusHandlers: function() {
-    // Attach focus handlers to open dropdown on focus (for TAB navigation and direct focus)
+    // Attach focus handlers to open dropdown on TAB navigation only (not mouse clicks)
     if (!this.$node || !this.$node.id) return;
     
     const $select2 = $("#" + this.$node.id);
@@ -78,73 +78,54 @@ dmx.Component("select2", {
     }
     
     const isMultiple = this.props.multiple;
-    let interactionInProgress = false;
-    
-    // Add focus handler on the original select element
-    const openDropdown = function() {
-      if (isMultiple && interactionInProgress) return;
+    let focusTimeout = null;
+    let lastInteraction = 'mouse'; // default
+
+    // Detect keyboard navigation (Tab, arrows, Enter, Space)
+    $(document).on('keydown', function (e) {
+      if (e.key === 'Tab' || e.key === 'Enter' || e.key === ' ' || e.key.startsWith('Arrow')) {
+        lastInteraction = 'keyboard';
+      }
+    });
+
+    // Detect mouse interaction
+    $(document).on('mousedown touchstart', function () {
+      lastInteraction = 'mouse';
+    });
+    // Only open on keyboard-triggered focus (Tab), not mouse click
+    const openDropdownOnKeyboardFocus = function(e) {
+      // 🚫 Ignore mouse-triggered focus
+      if (lastInteraction !== 'keyboard') {
+        return;
+      }
+      if (!e || (e.originalEvent && e.originalEvent.type === 'focus' && !e.originalEvent.isTrusted)) {
+        return;
+      }
+      
+      // Clear any pending timeout
+      if (focusTimeout) clearTimeout(focusTimeout);
       
       const instance = $select2.data('select2');
       if (instance && !instance.isOpen()) {
-        // For multiselect, add a small delay to avoid conflicts with selection events
-        if (isMultiple) {
-          setTimeout(() => {
-            if (interactionInProgress) return;
-            const inst = $select2.data('select2');
-            if (inst && !inst.isOpen()) {
-              $select2.select2('open');
-            }
-          }, 50);
-        } else {
-          $select2.select2('open');
-        }
+        // Avoid rapid open/close cycles with debounce
+        focusTimeout = setTimeout(() => {
+          const inst = $select2.data('select2');
+          if (inst && !inst.isOpen()) {
+            $select2.select2('open');
+          }
+          focusTimeout = null;
+        }, 10);
       }
     };
     
-    $select2.on('focus.autoopen', openDropdown);
-    
-    // ALSO attach to the Select2 selection container (for TAB navigation)
-    if (select2Instance.$container) {
+    // For multiselect, only attach to search field, not the container
+    if (isMultiple && select2Instance.$container) {
+      const $searchField = select2Instance.$container.find('.select2-search__field');
+      $searchField.on('focus.autoopen', openDropdownOnKeyboardFocus);
+    } else if (!isMultiple && select2Instance.$container) {
+      // For single select, attach to selection container
       const $selection = select2Instance.$container.find('.select2-selection');
-      $selection.on('focus.autoopen', function() {
-        if (isMultiple && interactionInProgress) return;
-        
-        const instance = $select2.data('select2');
-        if (instance && !instance.isOpen()) {
-          // For multiselect, add a small delay to avoid conflicts
-          if (isMultiple) {
-            setTimeout(() => {
-              if (interactionInProgress) return;
-              const inst = $select2.data('select2');
-              if (inst && !inst.isOpen()) {
-                $select2.select2('open');
-              }
-            }, 50);
-          } else {
-            $select2.select2('open');
-          }
-        }
-      });
-      
-      // For multiselect, attach to the search field inside the selection
-      // (This is what receives focus during TAB navigation)
-      if (isMultiple) {
-        const $searchField = $selection.find('.select2-search__field');
-        $searchField.on('focus.autoopen', function() {
-          if (interactionInProgress) return;
-          
-          const instance = $select2.data('select2');
-          if (instance && !instance.isOpen()) {
-            setTimeout(() => {
-              if (interactionInProgress) return;
-              const inst = $select2.data('select2');
-              if (inst && !inst.isOpen()) {
-                $select2.select2('open');
-              }
-            }, 50);
-          }
-        });
-      }
+      $selection.on('focus.autoopen', openDropdownOnKeyboardFocus);
     }
   },
 
@@ -370,4 +351,4 @@ dmx.Component("select2", {
   },
 });
 
-//Created and Maintained by Roney Dsilva v0.6.7
+//Created and Maintained by Roney Dsilva v0.6.8
