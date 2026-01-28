@@ -4,7 +4,8 @@ dmx.Component("select2", {
     selectedIndex: -1,
     selectedValue: "",
     selectedText: "",
-    selectedOptions: []
+    selectedOptions: [],
+    valueSelected: false
   },
   attributes: {
     options: { type: [Array, Object, Number], default: null },
@@ -62,72 +63,6 @@ dmx.Component("select2", {
     closed: Event,
     changed: Event
   },
-  _attachFocusHandlers: function() {
-    // Attach focus handlers to open dropdown on TAB navigation only (not mouse clicks)
-    if (!this.$node || !this.$node.id) return;
-    
-    const $select2 = $("#" + this.$node.id);
-    const select2Instance = $select2.data('select2');
-    
-    if (!select2Instance) return;
-    
-    // Remove previous handlers to avoid duplicates
-    $select2.off('focus.autoopen');
-    if (select2Instance.$container) {
-      select2Instance.$container.find('.select2-selection').off('focus.autoopen');
-    }
-    
-    const isMultiple = this.props.multiple;
-    let focusTimeout = null;
-    let lastInteraction = 'mouse'; // default
-
-    // Detect keyboard navigation (Tab, arrows, Enter, Space)
-    $(document).on('keydown', function (e) {
-      if (e.key === 'Tab' || e.key === 'Enter' || e.key === ' ' || e.key.startsWith('Arrow')) {
-        lastInteraction = 'keyboard';
-      }
-    });
-
-    // Detect mouse interaction
-    $(document).on('mousedown touchstart', function () {
-      lastInteraction = 'mouse';
-    });
-    // Only open on keyboard-triggered focus (Tab), not mouse click
-    const openDropdownOnKeyboardFocus = function(e) {
-      // 🚫 Ignore mouse-triggered focus
-      if (lastInteraction !== 'keyboard') {
-        return;
-      }
-      if (!e || (e.originalEvent && e.originalEvent.type === 'focus' && !e.originalEvent.isTrusted)) {
-        return;
-      }
-      
-      // Clear any pending timeout
-      if (focusTimeout) clearTimeout(focusTimeout);
-      
-      const instance = $select2.data('select2');
-      if (instance && !instance.isOpen()) {
-        // Avoid rapid open/close cycles with debounce
-        focusTimeout = setTimeout(() => {
-          const inst = $select2.data('select2');
-          if (inst && !inst.isOpen()) {
-            $select2.select2('open');
-          }
-          focusTimeout = null;
-        }, 10);
-      }
-    };
-    
-    // For multiselect, only attach to search field, not the container
-    if (isMultiple && select2Instance.$container) {
-      const $searchField = select2Instance.$container.find('.select2-search__field');
-      $searchField.on('focus.autoopen', openDropdownOnKeyboardFocus);
-    } else if (!isMultiple && select2Instance.$container) {
-      // For single select, attach to selection container
-      const $selection = select2Instance.$container.find('.select2-selection');
-      $selection.on('focus.autoopen', openDropdownOnKeyboardFocus);
-    }
-  },
 
   renderSelect: function () {
     let dropdown_parent = null;
@@ -156,6 +91,53 @@ dmx.Component("select2", {
       multiple: this.props.multiple,
       minimumResultsForSearch: this.props.minimum_results_for_search
     });
+
+    let tabPressed = false;
+
+    // Track if TAB was pressed
+    $(document).on('keydown', function (e) {
+      if (e.key === 'Tab') tabPressed = true;
+    });
+
+    $(document).on('mousedown', function () {
+      tabPressed = false;
+    });
+
+    // Only target your specific select
+    const $select = $(this.$node);
+    const $selectContainer = $select.next('.select2-container');
+    const $selection = $selectContainer.find('.select2-selection--single, .select2-selection--multiple');
+
+    $selection.on('focusin', function () {
+      if (!tabPressed) return;
+
+      // Make sure select2 instance exists and is not already open
+      if (!$select.length || !$select.data('select2') || $select.data('select2').isOpen()) {
+        return;
+      }
+
+      // Open dropdown on next tick to avoid recursive focus loop
+      setTimeout(() => {
+        $select.select2('open');
+        tabPressed = false; // Reset tabPressed after opening
+      }, 0);
+    });
+
+    // Reset tabPressed when selection happens
+    $select.on('select2:select', function () {
+      tabPressed = false;
+    });
+
+    // Ensure TAB works normally after closing dropdown
+    $select.on('select2:closing', function (e) {
+      const $selection = $(e.target).data('select2').$selection;
+
+      // Stop focusin from bubbling to prevent stealing TAB focus
+      $selection.one('focusin', function (ev) {
+        ev.stopPropagation();
+      });
+    });
+
     (this.props.field_placeholder && this.props.value == "")
       ? $("#" + this.$node.id).val('').trigger('change') : null
   },
@@ -213,13 +195,9 @@ dmx.Component("select2", {
       }, 0);
     });
 
-
     dmx.nextTick(function () {
       this.renderSelect();
-      
-      // Attach focus handlers after Select2 is initialized
-      this._attachFocusHandlers();
-      
+
       if (!this.$node) return
       if ($("#" + this.$node.id).closest(".modal").length > 0) {
         let modalID = $("#" + this.$node.id).closest(".modal").attr("id");
@@ -326,9 +304,6 @@ dmx.Component("select2", {
     // Refresh select UI and update data
     this.renderSelect();
     this._updateValue();
-    
-    // Re-attach focus handlers after performUpdate
-    this._attachFocusHandlers();
   },
   _inputHandler(e) { },
   _changeHandler(e) {
@@ -351,4 +326,4 @@ dmx.Component("select2", {
   },
 });
 
-//Created and Maintained by Roney Dsilva v0.6.8
+//Created and Maintained by Roney Dsilva v0.6.9
